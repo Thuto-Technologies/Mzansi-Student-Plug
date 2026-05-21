@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentMart SA — A ThutoTech Ecosystem Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/poppins@5.0.8/index.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1B5E20;
+            --primary-light: #4CAF50;
+            --primary-dark: #0D3B12;
+            --secondary: #FF6F00;
+            --accent: #FFC107;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --whatsapp: #25D366;
+            --ai-purple: #8B5CF6;
+            --ai-blue: #3B82F6;
+            --thuto-teal: #0d9488;
+            --thuto-cyan: #06b6d4;
+            --thuto-indigo: #4f46e5;
+            --thuto-navy: #0f172a;
+            --card-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--dark); line-height: 1.6; }
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
+
+        /* ThutoTech Top Bar */
+        .thuto-topbar {
+            background: linear-gradient(135deg, var(--thuto-navy), #1e293b);
+            padding: 0.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.8);
+            position: relative;
+            z-index: 1001;
+        }
+        .thuto-topbar a { color: var(--thuto-cyan); text-decoration: none; font-weight: 600; }
+        .thuto-topbar a:hover { text-decoration: underline; }
+        .thuto-topbar .ecosystem-badge {
+            background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan));
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar { position: fixed; top: 30px; width: 100%; background: white; box-shadow: 0 2px 20px rgba(0,0,0,0.06); z-index: 1000; transition: var(--transition); }
+        .navbar.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.1); top: 0; }
+        .navbar.scrolled + .thuto-topbar-spacer { display: none; }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0.8rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+        .logo-icon { width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .logo-icon::before { content: ''; position: absolute; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; top: 5px; right: 5px; opacity: 0.7; }
+        .logo-icon i { color: white; font-size: 1.2rem; z-index: 1; }
+        .logo-text { font-family: 'Poppins', sans-serif; }
+        .logo-text span:first-child { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .logo-text span:last-child { font-size: 1.3rem; font-weight: 700; color: var(--secondary); }
+        .logo-subtitle { font-size: 0.55rem; color: var(--thuto-teal); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .thuto-badge-logo { background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; font-size: 0.5rem; padding: 2px 5px; border-radius: 3px; margin-left: 3px; font-weight: 700; }
+        .ai-badge-logo { background: linear-gradient(135deg, var(--ai-purple), var(--ai-blue)); color: white; font-size: 0.55rem; padding: 2px 6px; border-radius: 4px; margin-left: 4px; font-weight: 700; }
+        .nav-links { display: flex; align-items: center; gap: 0.4rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--dark); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: var(--transition); }
+        .nav-links a:hover { background: rgba(76, 175, 80, 0.1); color: var(--primary); }
+        .nav-links .eco-link { color: var(--thuto-teal); font-weight: 600; }
+        .nav-links .eco-link:hover { background: rgba(13,148,136,0.1); }
+        .nav-actions { display: flex; align-items: center; gap: 0.6rem; }
+        .btn { padding: 0.6rem 1.3rem; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: var(--transition); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-family: inherit; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4); }
+        .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-secondary:hover { background: var(--primary); color: white; }
+        .btn-accent { background: linear-gradient(135deg, var(--secondary), #FF8F00); color: white; box-shadow: 0 4px 15px rgba(255, 111, 0, 0.3); }
+        .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 111, 0, 0.4); }
+        .btn-ai { background: linear-gradient(135deg, var(--ai-purple), var(--ai-blue)); color: white; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
+        .btn-ai:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); }
+        .btn-thuto { background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; box-shadow: 0 4px 15px rgba(13,148,136,0.3); }
+        .btn-thuto:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(13,148,136,0.4); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-whatsapp:hover { background: #1ebe57; transform: translateY(-2px); }
+        .cart-btn { position: relative; width: 42px; height: 42px; border-radius: 10px; background: var(--light); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--dark); transition: var(--transition); }
+        .cart-btn:hover { background: var(--primary); color: white; }
+        .cart-count { position: absolute; top: -4px; right: -4px; background: var(--secondary); color: white; font-size: 0.65rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .mobile-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--dark); }
+
+        .hero { margin-top: 110px; padding: 4rem 2rem; background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%); position: relative; overflow: hidden; min-height: 550px; display: flex; align-items: center; }
+        .hero::before { content: ''; position: absolute; top: -50%; right: -10%; width: 600px; height: 600px; background: rgba(255, 193, 7, 0.1); border-radius: 50%; }
+        .hero::after { content: ''; position: absolute; bottom: -30%; left: -5%; width: 400px; height: 400px; background: rgba(255, 111, 0, 0.08); border-radius: 50%; }
+        .hero-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; width: 100%; }
+        .hero-content h1 { font-size: 3.2rem; color: white; line-height: 1.2; margin-bottom: 1.2rem; }
+        .hero-content h1 span { color: var(--accent); }
+        .hero-content > p { color: rgba(255,255,255,0.85); font-size: 1.15rem; margin-bottom: 2rem; max-width: 520px; }
+        .hero-eco-pill {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(13,148,136,0.25); border: 1px solid rgba(6,182,212,0.4);
+            padding: 0.4rem 1rem; border-radius: 20px; color: #5eead4;
+            font-size: 0.78rem; font-weight: 600; margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        .hero-eco-pill i { color: var(--thuto-cyan); }
+        .hero-search { background: white; border-radius: 16px; padding: 0.5rem; display: flex; gap: 0.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 550px; }
+        .hero-search input { flex: 1; border: none; padding: 1rem 1.5rem; font-size: 1rem; outline: none; border-radius: 12px; font-family: inherit; }
+        .hero-search select { border: none; padding: 1rem; font-size: 0.9rem; background: var(--light); border-radius: 12px; outline: none; cursor: pointer; font-family: inherit; }
+        .hero-search button { padding: 1rem 2rem; background: linear-gradient(135deg, var(--secondary), #FF8F00); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: inherit; }
+        .hero-search button:hover { transform: scale(1.02); }
+        .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; }
+        .stat-item { text-align: center; }
+        .stat-item h3 { color: var(--accent); font-size: 1.8rem; }
+        .stat-item p { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+        .hero-visual { display: flex; justify-content: center; align-items: center; }
+        .hero-cards { position: relative; width: 420px; height: 420px; }
+        .hero-card { position: absolute; background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.15); animation: float 3s ease-in-out infinite; }
+        .hero-card:nth-child(1) { top: 0; left: 20px; animation-delay: 0s; }
+        .hero-card:nth-child(2) { top: 90px; right: 0; animation-delay: 1s; }
+        .hero-card:nth-child(3) { bottom: 80px; left: 40px; animation-delay: 2s; }
+        .hero-card-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.8rem; font-size: 1.3rem; }
+        .hero-card h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .hero-card p { font-size: 0.8rem; color: var(--gray); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* ThutoTech Ecosystem Section */
+        .ecosystem-section {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .ecosystem-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(13,148,136,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(79,70,229,0.1) 0%, transparent 50%);
+        }
+        .eco-container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+        .eco-header { text-align: center; margin-bottom: 3rem; }
+        .eco-header .eco-label {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(13,148,136,0.2); border: 1px solid rgba(6,182,212,0.3);
+            padding: 0.4rem 1rem; border-radius: 20px; color: #5eead4;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 1rem;
+        }
+        .eco-header h2 { color: white; font-size: 2.2rem; margin-bottom: 0.8rem; }
+        .eco-header h2 span { background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan), var(--thuto-indigo)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .eco-header p { color: rgba(255,255,255,0.7); font-size: 1.05rem; max-width: 700px; margin: 0 auto; }
+        .eco-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .eco-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .eco-card:hover {
+            border-color: rgba(6,182,212,0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(13,148,136,0.15);
+        }
+        .eco-card.active-card {
+            border-color: var(--primary-light);
+            background: rgba(76,175,80,0.08);
+        }
+        .eco-card.active-card::after {
+            content: 'YOU ARE HERE';
+            position: absolute; top: 10px; right: 10px;
+            background: var(--primary); color: white;
+            font-size: 0.55rem; padding: 2px 8px; border-radius: 4px;
+            font-weight: 700; letter-spacing: 0.5px;
+        }
+        .eco-card-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; margin-bottom: 1rem;
+        }
+        .eco-card h4 { color: white; font-size: 1rem; margin-bottom: 0.4rem; }
+        .eco-card p { color: rgba(255,255,255,0.6); font-size: 0.8rem; line-height: 1.5; }
+        .eco-card .eco-tag {
+            display: inline-block; margin-top: 0.8rem;
+            padding: 3px 10px; border-radius: 10px;
+            font-size: 0.65rem; font-weight: 600;
+        }
+        .eco-connector-text {
+            text-align: center; padding: 2rem 0;
+        }
+        .eco-connector-text p {
+            color: rgba(255,255,255,0.5); font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center; gap: 1rem;
+        }
+        .eco-connector-text .line {
+            height: 1px; width: 80px;
+            background: linear-gradient(90deg, transparent, rgba(6,182,212,0.5), transparent);
+        }
+        .eco-mcp-bar {
+            background: rgba(6,182,212,0.08);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex; align-items: center; gap: 2rem;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .eco-mcp-bar .mcp-label {
+            color: var(--thuto-cyan); font-weight: 700; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .eco-mcp-bar .mcp-items { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .eco-mcp-bar .mcp-item {
+            background: rgba(255,255,255,0.08);
+            padding: 0.35rem 0.8rem; border-radius: 8px;
+            color: rgba(255,255,255,0.7); font-size: 0.72rem;
+            display: flex; align-items: center; gap: 0.3rem;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .eco-mcp-bar .mcp-item i { color: var(--thuto-cyan); font-size: 0.7rem; }
+
+        /* Tutor Pipeline Section */
+        .tutor-pipeline-section { background: white; padding: 5rem 2rem; }
+        .pipeline-container { max-width: 1400px; margin: 0 auto; }
+        .pipeline-header { text-align: center; margin-bottom: 3rem; }
+        .pipeline-header h2 { font-size: 2.2rem; color: var(--dark); margin-bottom: 0.8rem; }
+        .pipeline-header h2 span { color: var(--thuto-teal); }
+        .pipeline-header p { color: var(--gray); font-size: 1.05rem; max-width: 650px; margin: 0 auto; }
+        .pipeline-flow {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        .pipeline-node {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        .pipeline-node:hover { transform: translateY(-5px); box-shadow: var(--card-shadow); }
+        .pipeline-node.node-matric { border-color: var(--thuto-teal); background: rgba(13,148,136,0.05); }
+        .pipeline-node.node-mart { border-color: var(--primary); background: rgba(76,175,80,0.05); }
+        .pipeline-node.node-friction { border-color: var(--ai-purple); background: rgba(139,92,246,0.05); }
+        .pipeline-node-icon {
+            width: 60px; height: 60px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem; font-size: 1.5rem;
+        }
+        .pipeline-node h4 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+        .pipeline-node p { font-size: 0.82rem; color: var(--gray); margin-bottom: 1rem; }
+        .pipeline-node .node-tag {
+            display: inline-block; padding: 3px 10px; border-radius: 8px;
+            font-size: 0.7rem; font-weight: 600;
+        }
+        .pipeline-arrow {
+            display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+            color: var(--gray);
+        }
+        .pipeline-arrow i { font-size: 1.5rem; color: var(--thuto-teal); }
+        .pipeline-arrow span { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pipeline-benefits {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+        }
+        .pipeline-benefit {
+            background: var(--light); border-radius: 16px; padding: 1.5rem;
+            display: flex; gap: 1rem; align-items: flex-start;
+        }
+        .pipeline-benefit-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; flex-shrink: 0;
+        }
+        .pipeline-benefit h5 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .pipeline-benefit p { font-size: 0.8rem; color: var(--gray); }
+
+        /* AI Banner */
+        .ai-banner { background: linear-gradient(135deg, #1e1b4b, #4c1d95, #7c3aed); padding: 3rem 2rem; position: relative; overflow: hidden; }
+        .ai-banner::before { content: ''; position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%); border-radius: 50%; }
+        .ai-banner-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: center; position: relative; z-index: 1; }
+        .ai-banner-content h2 { color: white; font-size: 2rem; margin-bottom: 0.8rem; }
+        .ai-banner-content h2 span { background: linear-gradient(135deg, #60a5fa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .ai-banner-content p { color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; max-width: 600px; }
+        .ai-features-mini { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+        .ai-feature-pill { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 20px; color: white; font-size: 0.78rem; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; gap: 0.5rem; }
+        .ai-feature-pill i { color: var(--accent); }
+        .ai-banner-visual { display: flex; justify-content: center; }
+        .ai-orb { width: 200px; height: 200px; background: conic-gradient(from 0deg, #60a5fa, #c084fc, #f472b6, #60a5fa); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: rotate 8s linear infinite; position: relative; }
+        .ai-orb::before { content: ''; position: absolute; inset: 8px; background: linear-gradient(135deg, #1e1b4b, #4c1d95); border-radius: 50%; }
+        .ai-orb i { position: relative; z-index: 1; font-size: 4rem; color: white; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .section { padding: 5rem 2rem; }
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 { font-size: 2.2rem; color: var(--dark); margin-bottom: 0.8rem; }
+        .section-header p { color: var(--gray); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+
+        .services-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
+        .service-card { background: white; border-radius: 20px; padding: 1.8rem 1.5rem; text-align: center; box-shadow: var(--card-shadow); transition: var(--transition); cursor: pointer; border: 2px solid transparent; position: relative; }
+        .service-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); border-color: var(--primary-light); }
+        .service-icon { width: 65px; height: 65px; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.6rem; }
+        .service-card h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+        .service-card p { font-size: 0.8rem; color: var(--gray); }
+        .service-badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.65rem; font-weight: 600; margin-top: 0.8rem; }
+        .service-new-badge { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #ef4444, #f97316); color: white; font-size: 0.6rem; padding: 3px 8px; border-radius: 10px; font-weight: 700; }
+        .service-thuto-badge { position: absolute; top: 10px; left: 10px; background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; font-size: 0.55rem; padding: 3px 8px; border-radius: 10px; font-weight: 700; letter-spacing: 0.5px; }
+
+        /* IoT Lift Section */
+        .iot-lift-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; overflow: hidden; }
+        .iot-lift-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234ade80' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+        .iot-container { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+        .iot-header { text-align: center; margin-bottom: 3rem; }
+        .iot-header h2 { color: white; font-size: 2.2rem; margin-bottom: 0.5rem; }
+        .iot-header h2 span { color: #4ade80; }
+        .iot-header p { color: rgba(255,255,255,0.7); font-size: 1rem; }
+        .iot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .iot-features { display: grid; gap: 1.2rem; }
+        .iot-feature { display: flex; gap: 1rem; align-items: flex-start; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+        .iot-feature-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .iot-feature h4 { color: white; font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .iot-feature p { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+        .iot-visual { display: flex; justify-content: center; }
+        .iot-phone-mockup { width: 280px; height: 500px; background: #1a1a2e; border-radius: 40px; border: 3px solid #333; padding: 15px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .iot-phone-screen { width: 100%; height: 100%; background: linear-gradient(180deg, #1e293b, #0f172a); border-radius: 28px; overflow: hidden; padding: 1rem; }
+        .iot-phone-header { text-align: center; margin-bottom: 1rem; }
+        .iot-phone-header h5 { color: #4ade80; font-size: 0.85rem; }
+        .iot-phone-header small { color: rgba(255,255,255,0.5); font-size: 0.65rem; }
+        .iot-map-placeholder { width: 100%; height: 150px; background: linear-gradient(135deg, #1e3a5f, #0f2439); border-radius: 12px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .iot-map-placeholder::before { content: ''; position: absolute; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(74,222,128,0.05) 20px, rgba(74,222,128,0.05) 21px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(74,222,128,0.05) 20px, rgba(74,222,128,0.05) 21px); }
+        .iot-map-dot { width: 12px; height: 12px; background: #4ade80; border-radius: 50%; position: absolute; animation: pulse 2s infinite; }
+        .iot-map-dot:nth-child(1) { top: 30%; left: 40%; }
+        .iot-map-dot:nth-child(2) { top: 60%; left: 65%; animation-delay: 0.5s; }
+        .iot-map-dot:nth-child(3) { top: 45%; left: 25%; animation-delay: 1s; }
+        .iot-map-route { position: absolute; top: 35%; left: 30%; width: 40%; height: 2px; background: linear-gradient(90deg, #4ade80, transparent); transform: rotate(25deg); }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 50% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } }
+        .iot-ride-card { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 0.8rem; margin-bottom: 0.6rem; border: 1px solid rgba(74,222,128,0.2); }
+        .iot-ride-card .ride-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .iot-ride-card .ride-header span { color: white; font-size: 0.75rem; font-weight: 600; }
+        .iot-ride-card .ride-header small { color: #4ade80; font-size: 0.7rem; font-weight: 700; }
+        .iot-ride-card .ride-details { display: flex; justify-content: space-between; }
+        .iot-ride-card .ride-details small { color: rgba(255,255,255,0.5); font-size: 0.65rem; }
+        .iot-safety-bar { display: flex; align-items: center; gap: 0.4rem; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); padding: 0.5rem 0.8rem; border-radius: 10px; margin-top: 0.8rem; }
+        .iot-safety-bar i { color: #4ade80; font-size: 0.8rem; }
+        .iot-safety-bar span { color: rgba(255,255,255,0.8); font-size: 0.7rem; }
+
+        .impact-section { background: white; }
+        .impact-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+        .impact-card { text-align: center; padding: 2rem; border-radius: 16px; background: var(--light); }
+        .impact-card i { font-size: 2rem; margin-bottom: 1rem; }
+        .impact-card h3 { font-size: 2rem; margin-bottom: 0.3rem; }
+        .impact-card p { font-size: 0.85rem; color: var(--gray); }
+
+        .listings-section { background: #f0f4f0; }
+        .listings-header { max-width: 1400px; margin: 0 auto 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .filter-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .filter-tab { padding: 0.5rem 1.2rem; border: 2px solid #e0e0e0; border-radius: 25px; background: white; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: var(--transition); font-family: inherit; }
+        .filter-tab:hover, .filter-tab.active { border-color: var(--primary); background: var(--primary); color: white; }
+        .listings-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+        .listing-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); transition: var(--transition); position: relative; }
+        .listing-card:hover { transform: translateY(-5px); box-shadow: 0 12px 35px rgba(0,0,0,0.12); }
+        .listing-img { width: 100%; height: 180px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--primary); position: relative; overflow: hidden; }
+        .listing-img img { width: 100%; height: 100%; object-fit: cover; }
+        .listing-badge-ai { position: absolute; top: 10px; left: 10px; background: linear-gradient(135deg, var(--ai-purple), var(--ai-blue)); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 4px; z-index: 2; }
+        .listing-badge-iot { position: absolute; top: 10px; left: 10px; background: linear-gradient(135deg, #059669, #10b981); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 4px; z-index: 2; }
+        .listing-badge-thuto { position: absolute; top: 10px; left: 10px; background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; font-size: 0.6rem; padding: 4px 8px; border-radius: 6px; font-weight: 700; display: flex; align-items: center; gap: 4px; z-index: 2; letter-spacing: 0.3px; }
+        .listing-mini-site-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); color: var(--primary); font-size: 0.65rem; padding: 4px 8px; border-radius: 6px; font-weight: 700; cursor: pointer; z-index: 2; transition: var(--transition); }
+        .listing-mini-site-badge:hover { background: var(--primary); color: white; }
+        .listing-content { padding: 1.5rem; }
+        .listing-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+        .listing-category { padding: 0.25rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; background: rgba(76, 175, 80, 0.1); color: var(--primary); }
+        .listing-price { font-weight: 700; color: var(--secondary); font-size: 1.1rem; }
+        .listing-content h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+        .listing-content p { font-size: 0.85rem; color: var(--gray); margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .listing-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid #f0f0f0; margin-bottom: 1rem; }
+        .listing-seller { display: flex; align-items: center; gap: 0.5rem; }
+        .seller-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-light), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: 700; }
+        .seller-info span { font-size: 0.8rem; font-weight: 500; }
+        .seller-info small { font-size: 0.7rem; color: var(--gray); display: block; }
+        .listing-rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; }
+        .listing-rating i { color: var(--accent); }
+        .listing-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .listing-actions .btn { padding: 0.55rem 0.5rem; font-size: 0.8rem; justify-content: center; width: 100%; }
+
+        .live-reviews { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 2rem; overflow: hidden; position: relative; }
+        .live-reviews-header { text-align: center; color: white; margin-bottom: 1.5rem; }
+        .live-reviews-header h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+        .live-dot { display: inline-block; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; margin-right: 6px; animation: pulse2 1.5s infinite; }
+        @keyframes pulse2 { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+        .live-reviews-track { display: flex; gap: 1.5rem; animation: scroll 50s linear infinite; width: max-content; }
+        .live-review-card { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 12px; min-width: 300px; color: white; }
+        .live-review-card .stars { color: var(--accent); font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .live-review-card p { font-size: 0.85rem; color: rgba(255,255,255,0.8); margin-bottom: 0.5rem; }
+        .live-review-card .author { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        .mini-websites-section { background: white; }
+        .mini-sites-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .mini-site-card { border-radius: 20px; overflow: hidden; box-shadow: var(--card-shadow); cursor: pointer; transition: var(--transition); position: relative; background: white; }
+        .mini-site-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+        .mini-site-preview { height: 200px; position: relative; overflow: hidden; }
+        .mini-site-preview-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%); }
+        .mini-site-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem; color: white; }
+        .mini-site-info h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .mini-site-info small { font-size: 0.75rem; opacity: 0.8; }
+        .mini-site-body { padding: 1.2rem; }
+        .mini-site-stats { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+        .mini-site-stat { text-align: center; }
+        .mini-site-stat strong { display: block; font-size: 1.1rem; color: var(--primary); }
+        .mini-site-stat span { font-size: 0.7rem; color: var(--gray); }
+
+        .how-it-works { background: white; }
+        .steps-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; position: relative; }
+        .steps-grid::before { content: ''; position: absolute; top: 40px; left: 15%; right: 15%; height: 3px; background: linear-gradient(to right, var(--thuto-teal), var(--primary), var(--secondary)); border-radius: 2px; }
+        .step-item { text-align: center; position: relative; z-index: 1; }
+        .step-number { width: 80px; height: 80px; border-radius: 50%; background: white; border: 3px solid var(--thuto-teal); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: 700; color: var(--thuto-teal); }
+        .step-item h4 { margin-bottom: 0.5rem; }
+        .step-item p { font-size: 0.85rem; color: var(--gray); }
+
+        .uni-banner { background: linear-gradient(135deg, var(--dark), #16213e); padding: 4rem 2rem; text-align: center; }
+        .uni-banner h2 { color: white; font-size: 2rem; margin-bottom: 1rem; }
+        .uni-banner p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
+        .uni-logos { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 0 auto; }
+        .uni-logo { background: rgba(255,255,255,0.1); padding: 0.8rem 1.3rem; border-radius: 12px; color: white; font-size: 0.85rem; font-weight: 500; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+
+        .testimonials-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: var(--card-shadow); }
+        .testimonial-card .stars { color: var(--accent); margin-bottom: 1rem; }
+        .testimonial-card p { font-style: italic; color: var(--gray); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+        .testimonial-avatar { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+        .testimonial-author h4 { font-size: 0.95rem; }
+        .testimonial-author span { font-size: 0.8rem; color: var(--gray); }
+
+        .footer { background: var(--thuto-navy); padding: 4rem 2rem 2rem; color: white; }
+        .footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer-brand p { color: rgba(255,255,255,0.6); margin-top: 1rem; font-size: 0.9rem; }
+        .footer-eco-note {
+            background: rgba(13,148,136,0.1); border: 1px solid rgba(6,182,212,0.2);
+            border-radius: 10px; padding: 0.8rem 1rem; margin-top: 1rem;
+            font-size: 0.78rem; color: #5eead4;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .footer-social { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .footer-social a { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: var(--transition); }
+        .footer-social a:hover { background: var(--thuto-teal); transform: translateY(-3px); }
+        .footer h4 { margin-bottom: 1.2rem; font-size: 1rem; }
+        .footer ul { list-style: none; }
+        .footer ul li { margin-bottom: 0.7rem; }
+        .footer ul a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+        .footer ul a:hover { color: var(--thuto-cyan); }
+        .footer ul .eco-footer-link { color: #5eead4; font-weight: 500; }
+        .footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-bottom p { color: rgba(255,255,255,0.5); font-size: 0.85rem; }
+        .sa-flag { display: inline-flex; gap: 2px; margin-left: 0.5rem; }
+        .sa-flag span { width: 12px; height: 8px; display: inline-block; border-radius: 1px; }
+
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 24px; padding: 2.5rem; max-width: 650px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; animation: modalIn 0.3s ease; }
+        .modal-large { max-width: 900px; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; width: 35px; height: 35px; border-radius: 50%; border: none; background: var(--light); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: var(--transition); }
+        .modal-close:hover { background: #fee; color: #e74c3c; }
+        .modal h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .modal > p { color: var(--gray); margin-bottom: 2rem; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.8rem 1.2rem; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.95rem; transition: var(--transition); font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--thuto-teal); outline: none; box-shadow: 0 0 0 4px rgba(13,148,136,0.1); }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-submit { width: 100%; padding: 1rem; font-size: 1rem; margin-top: 0.5rem; }
+
+        .ai-helper-bar { display: flex; gap: 0.5rem; align-items: center; background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(59,130,246,0.1)); border: 1px solid rgba(139,92,246,0.2); padding: 0.7rem 1rem; border-radius: 12px; margin-top: 0.5rem; }
+        .ai-helper-bar span { font-size: 0.8rem; color: var(--ai-purple); font-weight: 500; flex: 1; display: flex; align-items: center; gap: 0.4rem; }
+        .ai-helper-bar button { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
+
+        .image-upload-area { border: 2px dashed #d0d0d0; border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer; transition: var(--transition); background: var(--light); }
+        .image-upload-area:hover { border-color: var(--thuto-teal); background: rgba(13,148,136,0.05); }
+        .image-upload-area.has-image { padding: 0; border-style: solid; }
+        .image-upload-area i { font-size: 2.5rem; color: var(--gray); margin-bottom: 0.5rem; }
+        .image-upload-area p { color: var(--gray); font-size: 0.9rem; }
+        .image-upload-area small { color: var(--gray); font-size: 0.75rem; }
+        .image-preview { width: 100%; max-height: 250px; object-fit: cover; border-radius: 10px; }
+
+        .template-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .template-card { border: 2px solid #e8e8e8; border-radius: 12px; padding: 0.5rem; cursor: pointer; transition: var(--transition); text-align: center; }
+        .template-card:hover, .template-card.active { border-color: var(--thuto-teal); transform: translateY(-3px); box-shadow: 0 5px 20px rgba(13,148,136,0.2); }
+        .template-preview { height: 100px; border-radius: 8px; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700; }
+        .template-name { font-size: 0.85rem; font-weight: 600; }
+
+        .mini-site-builder { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .mini-site-form-col { max-height: 600px; overflow-y: auto; padding-right: 0.5rem; }
+        .mini-site-preview-col { position: sticky; top: 0; max-height: 600px; overflow-y: auto; border: 1px solid #e8e8e8; border-radius: 12px; padding: 1rem; background: var(--light); }
+        .mini-site-frame { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); min-height: 400px; }
+        .ms-hero { padding: 2rem 1rem; text-align: center; color: white; }
+        .ms-avatar { width: 70px; height: 70px; border-radius: 50%; background: white; margin: 0 auto 0.8rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.3rem; }
+        .ms-hero h3 { font-size: 1.1rem; margin-bottom: 0.2rem; }
+        .ms-hero p { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.8rem; }
+        .ms-hero .ms-verified { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 12px; font-size: 0.65rem; }
+        .ms-section { padding: 1rem; }
+        .ms-section h4 { font-size: 0.85rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.3rem; }
+        .ms-service-list { list-style: none; }
+        .ms-service-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem; border-radius: 8px; background: var(--light); margin-bottom: 0.4rem; font-size: 0.8rem; }
+        .ms-service-item strong { color: var(--thuto-teal); }
+        .ms-reviews { display: grid; gap: 0.5rem; }
+        .ms-review { background: var(--light); padding: 0.6rem; border-radius: 8px; font-size: 0.75rem; }
+        .ms-review .stars { color: var(--accent); font-size: 0.7rem; }
+        .ms-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 1rem; border-top: 1px solid #eee; }
+        .ms-actions button { padding: 0.5rem; border: none; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.3rem; font-family: inherit; }
+
+        .checkout-steps { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+        .checkout-step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--gray); }
+        .checkout-step.active { color: var(--thuto-teal); font-weight: 600; }
+        .checkout-step-num { width: 28px; height: 28px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
+        .checkout-step.active .checkout-step-num { background: var(--thuto-teal); color: white; }
+        .cart-item { display: flex; gap: 1rem; padding: 1rem; border-radius: 12px; background: var(--light); margin-bottom: 0.8rem; align-items: center; }
+        .cart-item-img { width: 60px; height: 60px; border-radius: 8px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; flex-shrink: 0; overflow: hidden; }
+        .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+        .cart-item-info { flex: 1; }
+        .cart-item-info h4 { font-size: 0.9rem; margin-bottom: 0.2rem; }
+        .cart-item-info p { font-size: 0.75rem; color: var(--gray); }
+        .cart-item-price { font-weight: 700; color: var(--secondary); }
+        .cart-item-remove { background: none; border: none; color: var(--gray); cursor: pointer; padding: 0.3rem; font-size: 0.9rem; }
+        .cart-item-remove:hover { color: #e74c3c; }
+        .cart-summary { background: var(--light); border-radius: 12px; padding: 1.2rem; margin-bottom: 1.5rem; }
+        .cart-summary-row { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9rem; }
+        .cart-summary-total { border-top: 2px solid #ddd; margin-top: 0.5rem; padding-top: 0.8rem; font-weight: 700; font-size: 1.1rem; }
+        .payment-methods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+        .payment-method { border: 2px solid #e0e0e0; border-radius: 12px; padding: 1rem; cursor: pointer; transition: var(--transition); text-align: center; }
+        .payment-method:hover, .payment-method.active { border-color: var(--thuto-teal); background: rgba(13,148,136,0.05); }
+        .payment-method i { font-size: 1.5rem; color: var(--thuto-teal); margin-bottom: 0.3rem; display: block; }
+        .payment-method strong { font-size: 0.85rem; display: block; margin-bottom: 0.2rem; }
+        .payment-method small { font-size: 0.7rem; color: var(--gray); }
+        .success-check { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; animation: successPop 0.5s ease; }
+        @keyframes successPop { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        .ai-widget { position: fixed; bottom: 2rem; right: 2rem; z-index: 1500; }
+        .ai-widget-btn { width: 60px; height: 60px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 10px 30px rgba(13,148,136,0.4); display: flex; align-items: center; justify-content: center; transition: var(--transition); position: relative; }
+        .ai-widget-btn:hover { transform: scale(1.1); }
+        .ai-widget-btn::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); opacity: 0.3; z-index: -1; animation: pulseRing 2s infinite; }
+        @keyframes pulseRing { 0% { transform: scale(1); opacity: 0.4; } 100% { transform: scale(1.5); opacity: 0; } }
+        .ai-chat-panel { position: absolute; bottom: 80px; right: 0; width: 380px; max-width: 90vw; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden; display: none; animation: modalIn 0.3s ease; }
+        .ai-chat-panel.active { display: block; }
+        .ai-chat-header { background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); padding: 1.2rem; color: white; display: flex; align-items: center; gap: 0.8rem; }
+        .ai-chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .ai-chat-header h4 { font-size: 0.95rem; margin: 0; }
+        .ai-chat-header small { font-size: 0.75rem; opacity: 0.8; }
+        .ai-chat-close { margin-left: auto; background: rgba(255,255,255,0.2); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+        .ai-chat-body { height: 380px; overflow-y: auto; padding: 1rem; background: #f8f9fb; }
+        .ai-msg { margin-bottom: 1rem; display: flex; gap: 0.5rem; }
+        .ai-msg-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+        .ai-msg.bot .ai-msg-avatar { background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; }
+        .ai-msg.user { flex-direction: row-reverse; }
+        .ai-msg.user .ai-msg-avatar { background: var(--primary); color: white; }
+        .ai-msg-bubble { background: white; padding: 0.7rem 1rem; border-radius: 12px; font-size: 0.85rem; max-width: 80%; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .ai-msg.user .ai-msg-bubble { background: var(--thuto-teal); color: white; }
+        .ai-chat-suggestions { padding: 0.5rem 1rem; background: white; display: flex; gap: 0.4rem; flex-wrap: wrap; border-top: 1px solid #eee; }
+        .ai-suggestion-chip { background: var(--light); border: 1px solid #e0e0e0; padding: 0.3rem 0.7rem; border-radius: 15px; font-size: 0.7rem; cursor: pointer; transition: var(--transition); font-family: inherit; }
+        .ai-suggestion-chip:hover { background: var(--thuto-teal); color: white; border-color: var(--thuto-teal); }
+        .ai-chat-input { display: flex; gap: 0.5rem; padding: 1rem; background: white; border-top: 1px solid #eee; }
+        .ai-chat-input input { flex: 1; border: 2px solid #e8e8e8; padding: 0.6rem 1rem; border-radius: 20px; font-size: 0.85rem; outline: none; font-family: inherit; }
+        .ai-chat-input input:focus { border-color: var(--thuto-teal); }
+        .ai-chat-input button { width: 38px; height: 38px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan)); color: white; cursor: pointer; font-size: 0.9rem; }
+        .typing-indicator { display: inline-flex; gap: 3px; padding: 0.5rem; }
+        .typing-indicator span { width: 6px; height: 6px; background: var(--gray); border-radius: 50%; animation: typingBounce 1.4s infinite; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+        .toast { position: fixed; bottom: 2rem; right: 6rem; background: var(--thuto-teal); color: white; padding: 1rem 1.5rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; align-items: center; gap: 0.8rem; z-index: 3000; animation: slideIn 0.3s ease; max-width: 350px; }
+        .toast.show { display: flex; }
+        .toast.error { background: #e74c3c; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .mobile-menu { display: none; position: fixed; top: 110px; left: 0; width: 100%; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 1.5rem; z-index: 999; }
+        .mobile-menu.active { display: block; }
+        .mobile-menu a { display: block; padding: 0.8rem 1rem; color: var(--dark); text-decoration: none; border-radius: 8px; font-weight: 500; transition: var(--transition); }
+        .mobile-menu a:hover { background: rgba(13,148,136,0.1); color: var(--thuto-teal); }
+
+        @media (max-width: 1024px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin: 0 auto 2rem; }
+            .hero-search { max-width: 100%; }
+            .hero-stats { justify-content: center; }
+            .hero-visual { display: none; }
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps-grid::before { display: none; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .ai-banner-container { grid-template-columns: 1fr; text-align: center; }
+            .ai-banner-visual { order: -1; }
+            .ai-orb { width: 150px; height: 150px; }
+            .ai-orb i { font-size: 3rem; }
+            .ai-features-mini { justify-content: center; }
+            .mini-site-builder { grid-template-columns: 1fr; }
+            .mini-site-preview-col { position: static; max-height: none; }
+            .iot-grid { grid-template-columns: 1fr; }
+            .iot-visual { order: -1; }
+            .impact-grid { grid-template-columns: repeat(2, 1fr); }
+            .eco-grid { grid-template-columns: repeat(2, 1fr); }
+            .pipeline-flow { grid-template-columns: 1fr; }
+            .pipeline-arrow { transform: rotate(90deg); }
+            .pipeline-benefits { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .thuto-topbar { font-size: 0.7rem; padding: 0.4rem 1rem; }
+            .navbar { top: 26px; }
+            .nav-links { display: none; }
+            .nav-actions .btn-secondary, .nav-actions .btn-ai { display: none; }
+            .mobile-toggle { display: block; }
+            .hero { margin-top: 100px; }
+            .hero-content h1 { font-size: 2.2rem; }
+            .hero-search { flex-direction: column; }
+            .listings-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .section { padding: 3rem 1.5rem; }
+            .template-grid { grid-template-columns: 1fr; }
+            .payment-methods { grid-template-columns: 1fr; }
+            .toast { right: 1rem; left: 1rem; max-width: none; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .eco-grid { grid-template-columns: 1fr; }
+            .mobile-menu { top: 100px; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: var(--thuto-teal); border-radius: 4px; }
+        .sa-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.15); padding: 0.4rem 1rem; border-radius: 20px; color: white; font-size: 0.8rem; margin-bottom: 1.5rem; }
+        .trust-badges { display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap; }
+        .trust-badge { display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; color: var(--gray); }
+        .trust-badge i { color: var(--thuto-teal); font-size: 1.3rem; }
+        .service-card { position: relative; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- ThutoTech Ecosystem Top Bar -->
+    <div class="thuto-topbar">
+        <span class="ecosystem-badge">THUTOTECH</span>
+        <span>Part of the <a href="https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/" target="_blank">ThutoTech Ecosystem</a> — Vertically-integrated AI education for South Africa 🇿🇦</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon"><i class="fas fa-store"></i></div>
+                <div class="logo-text">
+                    <span>Student</span><span>Mart</span>
+                    <div class="logo-subtitle">ThutoTech <span class="ai-badge-logo">AI</span></div>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#ecosystem" class="eco-link">Ecosystem</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#tutor-pipeline">Tutoring</a></li>
+                <li><a href="#iot-lift">CampusLift</a></li>
+                <li><a href="#marketplace">Marketplace</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="cart-btn" onclick="openModal('checkout')" title="View Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="btn btn-thuto" onclick="openModal('miniSite')">
+                    <i class="fas fa-wand-magic-sparkles"></i> My Mini Site
+                </button>
+                <button class="btn btn-primary" onclick="openModal('post')">
+                    <i class="fas fa-plus"></i> Post Ad
+                </button>
+                <button class="mobile-toggle" onclick="toggleMobile()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home" onclick="toggleMobile()">Home</a>
+        <a href="#ecosystem" onclick="toggleMobile()">ThutoTech Ecosystem</a>
+        <a href="#services" onclick="toggleMobile()">Services</a>
+        <a href="#tutor-pipeline" onclick="toggleMobile()">Tutoring Pipeline</a>
+        <a href="#iot-lift" onclick="toggleMobile()">CampusLift</a>
+        <a href="#marketplace" onclick="toggleMobile()">Marketplace</a>
+        <a href="https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/" target="_blank" style="color: var(--thuto-teal);">🔗 ThutoTech Main Site</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-eco-pill">
+                    <i class="fas fa-layer-group"></i>
+                    Powered by ThutoTech Ecosystem • Society 5.0 Aligned
+                </div>
+                <h1>Your AI-Powered Campus <span>Marketplace</span></h1>
+                <p>Photography, hair & nails, tutoring, rides, errands — all from students, for students. Seamlessly connected to MatricMate AI & Frictionless Learner for the complete South African learning journey.</p>
+                <div class="hero-search">
+                    <input type="text" placeholder="Search: tutors, photography, hair, lifts..." id="heroSearch">
+                    <select id="heroCategorySelect">
+                        <option>All Categories</option>
+                        <option>Tutoring</option>
+                        <option>Photography</option>
+                        <option>Hair & Beauty</option>
+                        <option>Nail Services</option>
+                        <option>CampusLift</option>
+                        <option>Products</option>
+                        <option>Errands</option>
+                    </select>
+                    <button onclick="performSearch()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item"><h3>25K+</h3><p>Active Students</p></div>
+                    <div class="stat-item"><h3>12K+</h3><p>Listings</p></div>
+                    <div class="stat-item"><h3>3K+</h3><p>Mini Sites</p></div>
+                    <div class="stat-item"><h3>4.8★</h3><p>Avg Rating</p></div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-cards">
+                    <div class="hero-card">
+                        <div class="hero-card-icon" style="background: rgba(13,148,136,0.1); color: var(--thuto-teal);"><i class="fas fa-graduation-cap"></i></div>
+                        <h4>MatricMate Tutor</h4>
+                        <p>R150/hour • Verified</p>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon" style="background: rgba(233,30,99,0.1); color: #E91E63;"><i class="fas fa-camera-retro"></i></div>
+                        <h4>Grad Photography</h4>
+                        <p>R250/session • Wits</p>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon" style="background: rgba(139,92,246,0.1); color: var(--ai-purple);"><i class="fas fa-users"></i></div>
+                        <h4>Frictionless Peer</h4>
+                        <p>Tutoring • Connected</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ThutoTech Ecosystem Section -->
+    <section class="ecosystem-section" id="ecosystem">
+        <div class="eco-container">
+            <div class="eco-header">
+                <div class="eco-label"><i class="fas fa-layer-group"></i> The ThutoTech Ecosystem</div>
+                <h2>A Vertically-Integrated <span>AI Education Platform</span></h2>
+                <p>Spanning the entire South African learning journey — from Foundation Phase to postgraduate research, and into student entrepreneurship. StudentMart is the marketplace layer of this ecosystem.</p>
+            </div>
+            <div class="eco-grid">
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(76,175,80,0.15); color: var(--primary);"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h4>Fundisa AI</h4>
+                    <p>CAPS-aligned lesson generation for Foundation Phase teachers. Reduce admin by 70%.</p>
+                    <span class="eco-tag" style="background: rgba(76,175,80,0.15); color: var(--primary);">Teachers</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(13,148,136,0.15); color: var(--thuto-teal);"><i class="fas fa-book-open"></i></div>
+                    <h4>MatricMate AI</h4>
+                    <p>Matric exam prep & study support with multilingual assistance — tutors from StudentMart feed directly into this platform.</p>
+                    <span class="eco-tag" style="background: rgba(13,148,136,0.15); color: var(--thuto-teal);">Matric Learners</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(79,70,229,0.15); color: var(--thuto-indigo);"><i class="fas fa-user-graduate"></i></div>
+                    <h4>SuperviseAI</h4>
+                    <p>AI-augmented postgraduate supervision with "Loop of Excellence" workflow.</p>
+                    <span class="eco-tag" style="background: rgba(79,70,229,0.15); color: var(--thuto-indigo);">Postgrads</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(139,92,246,0.15); color: var(--ai-purple);"><i class="fas fa-people-arrows"></i></div>
+                    <h4>Frictionless Learner</h4>
+                    <p>Predict+Connect peer tutoring platform with calendar integration — powered by StudentMart tutors.</p>
+                    <span class="eco-tag" style="background: rgba(139,92,246,0.15); color: var(--ai-purple);">Peer Tutoring</span>
+                </div>
+                <div class="eco-card active-card">
+                    <div class="eco-card-icon" style="background: rgba(76,175,80,0.2); color: var(--primary);"><i class="fas fa-store"></i></div>
+                    <h4>StudentMart SA</h4>
+                    <p>AI-powered student marketplace — tutoring, photography, beauty, rides, errands. Creating employment across the ecosystem.</p>
+                    <span class="eco-tag" style="background: rgba(76,175,80,0.2); color: var(--primary);">Marketplace</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(255,152,0,0.15); color: #FF9800;"><i class="fas fa-flask"></i></div>
+                    <h4>Thuto Research Studio</h4>
+                    <p>AI Research Mastery training with offline-first MCP architecture.</p>
+                    <span class="eco-tag" style="background: rgba(255,152,0,0.15); color: #FF9800;">Research</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(233,30,99,0.15); color: #E91E63;"><i class="fas fa-certificate"></i></div>
+                    <h4>Thuto AI Academy</h4>
+                    <p>ETDP SETA-aligned certifications for AI-enhanced teaching.</p>
+                    <span class="eco-tag" style="background: rgba(233,30,99,0.15); color: #E91E63;">Certifications</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(255,111,0,0.15); color: var(--secondary);"><i class="fas fa-car-side"></i></div>
+                    <h4>CampusLift</h4>
+                    <p>IoT-secured student ride-sharing — addressing transport barriers to education and employment.</p>
+                    <span class="eco-tag" style="background: rgba(255,111,0,0.15); color: var(--secondary);">Transport</span>
+                </div>
+                <div class="eco-card">
+                    <div class="eco-card-icon" style="background: rgba(6,182,212,0.15); color: var(--thuto-cyan);"><i class="fas fa-brain"></i></div>
+                    <h4>MCP Architecture</h4>
+                    <p>Model Context Protocol — the intelligent orchestration layer connecting all ThutoTech platforms.</p>
+                    <span class="eco-tag" style="background: rgba(6,182,212,0.15); color: var(--thuto-cyan);">Infrastructure</span>
+                </div>
+            </div>
+            <div class="eco-connector-text">
+                <p><span class="line"></span>Powered by Model Context Protocol (MCP)<span class="line"></span></p>
+            </div>
+            <div class="eco-mcp-bar">
+                <div class="mcp-label"><i class="fas fa-server"></i> MCP Layer</div>
+                <div class="mcp-items">
+                    <div class="mcp-item"><i class="fas fa-database"></i> Local CAPS DB</div>
+                    <div class="mcp-item"><i class="fas fa-shield-alt"></i> POPIA Compliance</div>
+                    <div class="mcp-item"><i class="fas fa-language"></i> 11 SA Languages</div>
+                    <div class="mcp-item"><i class="fas fa-sync-alt"></i> Smart Sync Engine</div>
+                    <div class="mcp-item"><i class="fas fa-wifi-slash"></i> Offline-First</div>
+                    <div class="mcp-item"><i class="fas fa-robot"></i> Qwen AI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutor Pipeline Section -->
+    <section class="tutor-pipeline-section" id="tutor-pipeline">
+        <div class="pipeline-container">
+            <div class="pipeline-header">
+                <h2>The <span>ThutoTech Tutor Pipeline</span></h2>
+                <p>StudentMart tutors are seamlessly connected to MatricMate AI and Frictionless Learner — creating a complete tutoring ecosystem from high school to university</p>
+            </div>
+            <div class="pipeline-flow">
+                <div class="pipeline-node node-matric">
+                    <div class="pipeline-node-icon" style="background: rgba(13,148,136,0.1); color: var(--thuto-teal);"><i class="fas fa-book-open"></i></div>
+                    <h4>MatricMate AI</h4>
+                    <p>Matric learners get AI-powered exam prep + access to verified human tutors from StudentMart for subjects they struggle with</p>
+                    <span class="node-tag" style="background: rgba(13,148,136,0.1); color: var(--thuto-teal);">Matric Learners Need Help</span>
+                </div>
+                <div class="pipeline-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>Tutors Matched</span>
+                </div>
+                <div class="pipeline-node node-mart">
+                    <div class="pipeline-node-icon" style="background: rgba(76,175,80,0.1); color: var(--primary);"><i class="fas fa-store"></i></div>
+                    <h4>StudentMart</h4>
+                    <p>Verified tertiary student tutors list their services with mini sites, WhatsApp booking, AI descriptions, and secure checkout</p>
+                    <span class="node-tag" style="background: rgba(76,175,80,0.1); color: var(--primary);">Tutors Available Here</span>
+                </div>
+                <div class="pipeline-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>Peer Connect</span>
+                </div>
+                <div class="pipeline-node node-friction">
+                    <div class="pipeline-node-icon" style="background: rgba(139,92,246,0.1); color: var(--ai-purple);"><i class="fas fa-people-arrows"></i></div>
+                    <h4>Frictionless Learner</h4>
+                    <p>Predict+Connect platform matches peers with calendar integration. StudentMart tutors appear as premium verified options</p>
+                    <span class="node-tag" style="background: rgba(139,92,246,0.1); color: var(--ai-purple);">Peer-to-Peer Tutoring</span>
+                </div>
+            </div>
+            <div class="pipeline-benefits">
+                <div class="pipeline-benefit">
+                    <div class="pipeline-benefit-icon" style="background: rgba(13,148,136,0.1); color: var(--thuto-teal);"><i class="fas fa-language"></i></div>
+                    <div>
+                        <h5>Multilingual Tutoring</h5>
+                        <p>Tutors available in all 11 SA languages via MCP's InkubaLM + NLLB routing — bridging language barriers in education</p>
+                    </div>
+                </div>
+                <div class="pipeline-benefit">
+                    <div class="pipeline-benefit-icon" style="background: rgba(76,175,80,0.1); color: var(--primary);"><i class="fas fa-check-double"></i></div>
+                    <div>
+                        <h5>CAPS-Aligned Quality</h5>
+                        <p>Tutors are verified against CAPS curriculum standards. Fundisa AI helps tutors prepare lesson plans aligned with national standards</p>
+                    </div>
+                </div>
+                <div class="pipeline-benefit">
+                    <div class="pipeline-benefit-icon" style="background: rgba(139,92,246,0.1); color: var(--ai-purple);"><i class="fas fa-calendar-check"></i></div>
+                    <div>
+                        <h5>Calendar Integration</h5>
+                        <p>Frictionless Learner's calendar syncs with StudentMart tutor availability — book sessions across platforms seamlessly</p>
+                    </div>
+                </div>
+                <div class="pipeline-benefit">
+                    <div class="pipeline-benefit-icon" style="background: rgba(255,152,0,0.1); color: #FF9800;"><i class="fas fa-wifi-slash"></i></div>
+                    <div>
+                        <h5>Offline-First Design</h5>
+                        <p>Tutor profiles and booking data cached offline. Smart Sync Engine updates when internet available — works in rural areas</p>
+                    </div>
+                </div>
+                <div class="pipeline-benefit">
+                    <div class="pipeline-benefit-icon" style="background: rgba(233,30,99,0.1); color: #E91E63;"><i class="fas fa-certificate"></i></div>
+                    <div>
+                        <h5>Thuto AI Academy Certified</h5>
+                        <p>Tutors can earn ETDP SETA-aligned certifications through Thuto AI Academy — boosting credibility and earning potential</p>
+                    </div>
+                </div>
+                <div class="pipeline-benefit">
+                    <div class="pipeline-benefit-icon" style="background: rgba(6,182,212,0.1); color: var(--thuto-cyan);"><i class="fas fa-chart-line"></i></div>
+                    <div>
+                        <h5>Impact Tracking</h5>
+                        <p>SuperviseAI tracks tutoring outcomes — connecting tutor performance to learner improvement across the ecosystem</p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <button class="btn btn-thuto" style="padding: 1rem 2rem; font-size: 1rem;" onclick="filterListings('tutoring')">
+                    <i class="fas fa-search"></i> Find a Verified Tutor
+                </button>
+                <button class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1rem; margin-left: 1rem;" onclick="openModal('post')">
+                    <i class="fas fa-plus"></i> List Your Tutoring
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Banner -->
+    <section class="ai-banner">
+        <div class="ai-banner-container">
+            <div class="ai-banner-content">
+                <h2>Human-Centered <span>AI Innovation</span></h2>
+                <p>Aligned with Japan's Society 5.0 vision: integrating cyberspace and physical space to solve social challenges through AI — keeping humans at the center. Technology serves students, not the other way around.</p>
+                <div class="ai-features-mini">
+                    <div class="ai-feature-pill"><i class="fas fa-wand-magic-sparkles"></i> AI Description Writer</div>
+                    <div class="ai-feature-pill"><i class="fas fa-globe"></i> Free Mini Website</div>
+                    <div class="ai-feature-pill"><i class="fab fa-whatsapp"></i> WhatsApp Booking</div>
+                    <div class="ai-feature-pill"><i class="fas fa-shield-alt"></i> POPIA Compliant</div>
+                    <div class="ai-feature-pill"><i class="fas fa-language"></i> 11 SA Languages</div>
+                    <div class="ai-feature-pill"><i class="fas fa-wifi-slash"></i> Offline-First</div>
+                </div>
+            </div>
+            <div class="ai-banner-visual">
+                <div class="ai-orb"><i class="fas fa-robot"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="services">
+        <div class="section-header">
+            <h2>All Services & Categories</h2>
+            <p>From tutoring to graduation photos — every way to earn and save, powered by the ThutoTech ecosystem</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card" onclick="filterListings('tutoring')">
+                <span class="service-thuto-badge">THUTOTECH</span>
+                <div class="service-icon" style="background: rgba(13,148,136,0.1); color: var(--thuto-teal);"><i class="fas fa-graduation-cap"></i></div>
+                <h3>Tutoring</h3>
+                <p>CAPS-aligned tutors connected to MatricMate AI & Frictionless Learner</p>
+                <span class="service-badge" style="background: rgba(13,148,136,0.1); color: var(--thuto-teal);">1.8K verified</span>
+            </div>
+            <div class="service-card" onclick="filterListings('photography')">
+                <div class="service-icon" style="background: rgba(233,30,99,0.1); color: #E91E63;"><i class="fas fa-camera-retro"></i></div>
+                <h3>Photography</h3>
+                <p>Graduation shoots, portraits, events, product photos</p>
+                <span class="service-badge" style="background: rgba(233,30,99,0.1); color: #E91E63;">890 listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('hair')">
+                <div class="service-icon" style="background: rgba(156,39,176,0.1); color: #9C27B0;"><i class="fas fa-cut"></i></div>
+                <h3>Hair & Styling</h3>
+                <p>Braids, weaves, cuts, colouring, hair products for sale</p>
+                <span class="service-badge" style="background: rgba(156,39,176,0.1); color: #9C27B0;">1.4K listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('nails')">
+                <div class="service-icon" style="background: rgba(255,64,129,0.1); color: #FF4081;"><i class="fas fa-hand-sparkles"></i></div>
+                <h3>Nail Services</h3>
+                <p>Acrylics, gel, manicures, pedicures, nail art designs</p>
+                <span class="service-badge" style="background: rgba(255,64,129,0.1); color: #FF4081;">720 listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('campuslift')">
+                <span class="service-new-badge">🔒 IoT SAFE</span>
+                <div class="service-icon" style="background: rgba(16,185,129,0.1); color: #10b981;"><i class="fas fa-car-side"></i></div>
+                <h3>CampusLift</h3>
+                <p>Student ride-sharing, lift clubs, campus-to-home trips</p>
+                <span class="service-badge" style="background: rgba(16,185,129,0.1); color: #10b981;">650 drivers</span>
+            </div>
+            <div class="service-card" onclick="filterListings('products')">
+                <div class="service-icon" style="background: rgba(33,150,243,0.1); color: #2196F3;"><i class="fas fa-laptop"></i></div>
+                <h3>Sell Products</h3>
+                <p>Textbooks, electronics, fashion, accessories</p>
+                <span class="service-badge" style="background: rgba(33,150,243,0.1); color: #2196F3;">2.4K listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('services')">
+                <div class="service-icon" style="background: rgba(76,175,80,0.1); color: var(--primary);"><i class="fas fa-tools"></i></div>
+                <h3>Pro Services</h3>
+                <p>Design, coding, writing, video editing, DJ</p>
+                <span class="service-badge" style="background: rgba(76,175,80,0.1); color: var(--primary);">1.8K listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('errands')">
+                <div class="service-icon" style="background: rgba(255,111,0,0.1); color: var(--secondary);"><i class="fas fa-running"></i></div>
+                <h3>Run Errands</h3>
+                <p>Grocery shopping, pickups, deliveries</p>
+                <span class="service-badge" style="background: rgba(255,111,0,0.1); color: var(--secondary);">950 listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('beauty')">
+                <div class="service-icon" style="background: rgba(255,152,0,0.1); color: #FF9800;"><i class="fas fa-spa"></i></div>
+                <h3>Beauty & Wellness</h3>
+                <p>Makeup, lashes, facials, massage therapy</p>
+                <span class="service-badge" style="background: rgba(255,152,0,0.1); color: #FF9800;">430 listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('babysitting')">
+                <div class="service-icon" style="background: rgba(233,30,99,0.1); color: #E91E63;"><i class="fas fa-baby-carriage"></i></div>
+                <h3>Babysitting</h3>
+                <p>Certified student sitters, flexible hours</p>
+                <span class="service-badge" style="background: rgba(233,30,99,0.1); color: #E91E63;">640 listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('food')">
+                <div class="service-icon" style="background: rgba(121,85,72,0.1); color: #795548;"><i class="fas fa-utensils"></i></div>
+                <h3>Food & Catering</h3>
+                <p>Home-cooked meals, baking, event catering</p>
+                <span class="service-badge" style="background: rgba(121,85,72,0.1); color: #795548;">380 listings</span>
+            </div>
+            <div class="service-card" onclick="filterListings('employment')">
+                <div class="service-icon" style="background: rgba(0,150,136,0.1); color: #009688;"><i class="fas fa-briefcase"></i></div>
+                <h3>Job Gigs</h3>
+                <p>Part-time work, freelance, campus jobs</p>
+                <span class="service-badge" style="background: rgba(0,150,136,0.1); color: #009688;">780 listings</span>
+            </div>
+        </div>
+        <div class="trust-badges">
+            <div class="trust-badge"><i class="fas fa-shield-alt"></i> POPIA Compliant</div>
+            <div class="trust-badge"><i class="fas fa-microchip"></i> IoT Security</div>
+            <div class="trust-badge"><i class="fas fa-layer-group"></i> ThutoTech Verified</div>
+            <div class="trust-badge"><i class="fas fa-wifi-slash"></i> Offline-First</div>
+        </div>
+    </section>
+
+    <!-- IoT CampusLift Section -->
+    <section class="section iot-lift-section" id="iot-lift">
+        <div class="iot-container">
+            <div class="iot-header">
+                <h2>🚗 <span>CampusLift</span> — IoT-Secured Student Rides</h2>
+                <p>Part of the ThutoTech ecosystem — addressing transport barriers to education and employment with verified, safe rides</p>
+            </div>
+            <div class="iot-grid">
+                <div class="iot-features">
+                    <div class="iot-feature">
+                        <div class="iot-feature-icon" style="background: rgba(74,222,128,0.15); color: #4ade80;"><i class="fas fa-microchip"></i></div>
+                        <div>
+                            <h4>IoT Vehicle Verification</h4>
+                            <p>Every registered vehicle has an IoT tracker linked to student ID. Real-time GPS tracking shared with trusted contacts.</p>
+                        </div>
+                    </div>
+                    <div class="iot-feature">
+                        <div class="iot-feature-icon" style="background: rgba(96,165,250,0.15); color: #60a5fa;"><i class="fas fa-id-card"></i></div>
+                        <div>
+                            <h4>Student ID Verification</h4>
+                            <p>All drivers verified with university student cards, SA ID, and driver's license. Multi-factor authentication required.</p>
+                        </div>
+                    </div>
+                    <div class="iot-feature">
+                        <div class="iot-feature-icon" style="background: rgba(251,191,36,0.15); color: #fbbf24;"><i class="fas fa-route"></i></div>
+                        <div>
+                            <h4>Smart Route Matching</h4>
+                            <p>AI matches riders going the same direction. Lift clubs for daily campus commutes. Split costs fairly.</p>
+                        </div>
+                    </div>
+                    <div class="iot-feature">
+                        <div class="iot-feature-icon" style="background: rgba(248,113,113,0.15); color: #f87171;"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div>
+                            <h4>Panic Button & SOS</h4>
+                            <p>One-tap emergency alert sent to campus security, SAPS, and your emergency contacts with live location.</p>
+                        </div>
+                    </div>
+                    <div class="iot-feature">
+                        <div class="iot-feature-icon" style="background: rgba(192,132,252,0.15); color: #c084fc;"><i class="fas fa-wallet"></i></div>
+                        <div>
+                            <h4>Affordable & Transparent</h4>
+                            <p>Fares from R15 for campus routes. Drivers earn directly. No surge pricing. Cash, card, or e-wallet accepted.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="iot-visual">
+                    <div class="iot-phone-mockup">
+                        <div class="iot-phone-screen">
+                            <div class="iot-phone-header">
+                                <h5><i class="fas fa-car-side"></i> CampusLift</h5>
+                                <small>🟢 3 rides available near you</small>
+                            </div>
+                            <div class="iot-map-placeholder">
+                                <div class="iot-map-dot"></div>
+                                <div class="iot-map-dot"></div>
+                                <div class="iot-map-dot"></div>
+                                <div class="iot-map-route"></div>
+                            </div>
+                            <div class="iot-ride-card">
+                                <div class="ride-header">
+                                    <span>🚗 Thabo M. — Wits → Braamfontein</span>
+                                    <small>R25</small>
+                                </div>
+                                <div class="ride-details">
+                                    <small>⭐ 4.9 • IoT Verified</small>
+                                    <small>Departs: 14:30</small>
+                                </div>
+                            </div>
+                            <div class="iot-ride-card">
+                                <div class="ride-header">
+                                    <span>🚗 Lerato N. — UP → Hatfield</span>
+                                    <small>R18</small>
+                                </div>
+                                <div class="ride-details">
+                                    <small>⭐ 4.8 • IoT Verified</small>
+                                    <small>Departs: 15:00</small>
+                                </div>
+                            </div>
+                            <div class="iot-ride-card">
+                                <div class="ride-header">
+                                    <span>🚗 Sipho K. — UJ → Soweto</span>
+                                    <small>R35</small>
+                                </div>
+                                <div class="ride-details">
+                                    <small>⭐ 5.0 • IoT Verified</small>
+                                    <small>Departs: 16:00</small>
+                                </div>
+                            </div>
+                            <div class="iot-safety-bar">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>All rides IoT-tracked • Share trip with friends</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="section impact-section">
+        <div class="section-header">
+            <h2>ThutoTech Ecosystem Impact</h2>
+            <p>Real results across the entire South African learning journey</p>
+        </div>
+        <div class="impact-grid">
+            <div class="impact-card">
+                <i class="fas fa-money-bill-wave" style="color: var(--primary);"></i>
+                <h3 style="color: var(--primary);">R8.2M+</h3>
+                <p>Earned by students on StudentMart this year</p>
+            </div>
+            <div class="impact-card">
+                <i class="fas fa-book-open" style="color: var(--thuto-teal);"></i>
+                <h3 style="color: var(--thuto-teal);">12K+</h3>
+                <p>Matric learners tutored via MatricMate AI pipeline</p>
+            </div>
+            <div class="impact-card">
+                <i class="fas fa-car" style="color: #10b981;"></i>
+                <h3 style="color: #10b981;">32K+</h3>
+                <p>Safe CampusLift rides completed</p>
+            </div>
+            <div class="impact-card">
+                <i class="fas fa-users" style="color: var(--ai-purple);"></i>
+                <h3 style="color: var(--ai-purple);">5,400+</h3>
+                <p>Students created their own employment</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Reviews Ticker -->
+    <section class="live-reviews">
+        <div class="live-reviews-header">
+            <h3><span class="live-dot"></span>Live Reviews from the Ecosystem</h3>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Real feedback from students across the ThutoTech ecosystem</p>
+        </div>
+        <div style="overflow: hidden;">
+            <div class="live-reviews-track" id="liveReviewsTrack"></div>
+        </div>
+    </section>
+
+    <!-- Listings -->
+    <section class="section listings-section" id="marketplace">
+        <div class="listings-header">
+            <div>
+                <h2 style="font-size: 1.8rem; margin-bottom: 0.3rem;">Latest Listings</h2>
+                <p style="color: var(--gray); font-size: 0.95rem;">Discover what students across the ThutoTech ecosystem are offering</p>
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="setFilter(this, 'all')">All</button>
+                <button class="filter-tab" onclick="setFilter(this, 'tutoring')">📚 Tutoring</button>
+                <button class="filter-tab" onclick="setFilter(this, 'photography')">📸 Photography</button>
+                <button class="filter-tab" onclick="setFilter(this, 'hair')">💇 Hair</button>
+                <button class="filter-tab" onclick="setFilter(this, 'nails')">💅 Nails</button>
+                <button class="filter-tab" onclick="setFilter(this, 'campuslift')">🚗 CampusLift</button>
+                <button class="filter-tab" onclick="setFilter(this, 'products')">📦 Products</button>
+                <button class="filter-tab" onclick="setFilter(this, 'services')">🛠️ Services</button>
+                <button class="filter-tab" onclick="setFilter(this, 'errands')">🏃 Errands</button>
+                <button class="filter-tab" onclick="setFilter(this, 'food')">🍲 Food</button>
+            </div>
+        </div>
+        <div class="listings-grid" id="listingsGrid"></div>
+    </section>
+
+    <!-- Mini Websites Showcase -->
+    <section class="section mini-websites-section" id="mini-sites">
+        <div class="section-header">
+            <h2>🌟 Student Mini Websites</h2>
+            <p>Every service provider gets a free AI-generated mini website with WhatsApp booking & checkout — part of the ThutoTech ecosystem</p>
+        </div>
+        <div class="mini-sites-grid" id="miniSitesGrid"></div>
+        <div style="text-align: center; margin-top: 2.5rem;">
+            <button class="btn btn-thuto" style="padding: 1rem 2rem; font-size: 1rem;" onclick="openModal('miniSite')">
+                <i class="fas fa-wand-magic-sparkles"></i> Create Your Free Mini Website
+            </button>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="section how-it-works" id="how-it-works">
+        <div class="section-header">
+            <h2>How the Ecosystem Works</h2>
+            <p>From sign-up to earning — seamlessly connected across ThutoTech platforms</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <h4>Sign Up & Verify</h4>
+                <p>Register with student email. POPIA-compliant verification via MCP architecture.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <h4>AI Builds Your Site</h4>
+                <p>Fill in your service, AI writes your description and builds a mini site in 11 SA languages.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <h4>Get Connected</h4>
+                <p>Tutors appear on MatricMate AI & Frictionless Learner. Services reach the whole ecosystem.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <h4>Earn & Grow</h4>
+                <p>Collect reviews, earn Thuto Academy certifications, grow your student business.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Universities -->
+    <section class="uni-banner">
+        <h2>Connected Across South African Universities</h2>
+        <p>Students from these institutions are earning and learning through the ThutoTech ecosystem</p>
+        <div class="uni-logos">
+            <div class="uni-logo">🎓 UCT</div>
+            <div class="uni-logo">🎓 Wits</div>
+            <div class="uni-logo">🎓 UP (Tuks)</div>
+            <div class="uni-logo">🎓 Stellenbosch</div>
+            <div class="uni-logo">🎓 UJ</div>
+            <div class="uni-logo">🎓 NWU</div>
+            <div class="uni-logo">🎓 UKZN</div>
+            <div class="uni-logo">🎓 Rhodes</div>
+            <div class="uni-logo">🎓 UFS</div>
+            <div class="uni-logo">🎓 Nelson Mandela Uni</div>
+            <div class="uni-logo">🎓 TUT</div>
+            <div class="uni-logo">🎓 DUT</div>
+            <div class="uni-logo">🎓 CPUT</div>
+            <div class="uni-logo">🎓 VUT</div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section" id="testimonials">
+        <div class="section-header">
+            <h2>What Students Say</h2>
+            <p>Real stories from students across the ThutoTech ecosystem</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"I'm listed on StudentMart AND connected to MatricMate AI. Matric learners find me through both platforms! I now tutor 15 regular students earning R6,000/month. The ThutoTech ecosystem is genius."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">TM</div>
+                    <div><h4>Thabo Molefe</h4><span>BCom Student, Wits • MatricMate Tutor</span></div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"I photographed 12 graduations last season! My mini site with WhatsApp booking made it so easy. Made R18,000 in graduation season alone! The AI description generator saved me hours."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MM</div>
+                    <div><h4>Mandla Mthembu</h4><span>Media Student, Wits</span></div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"CampusLift changed my life! I earn R3,500/month driving students home after lectures. The IoT tracking makes everyone feel safe — parents love it. Proud to be part of ThutoTech."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SK</div>
+                    <div><h4>Sipho Khumalo</h4><span>BSc Student, UP • CampusLift Driver</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="background: linear-gradient(135deg, var(--thuto-navy), #1e293b); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 30% 50%, rgba(13,148,136,0.15) 0%, transparent 60%);"></div>
+        <div style="position: relative; z-index: 1;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(13,148,136,0.2); border: 1px solid rgba(6,182,212,0.3); padding: 0.4rem 1rem; border-radius: 20px; color: #5eead4; font-size: 0.78rem; font-weight: 600; margin-bottom: 1.5rem;">
+                <i class="fas fa-layer-group"></i> Part of the ThutoTech Ecosystem
+            </div>
+            <h2 style="color: white; font-size: 2.2rem; margin-bottom: 1rem;">Stop Waiting for a Job. Create One.</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;">Join 25,000+ South African students earning on their own terms — connected to the full ThutoTech education ecosystem.</p>
+            <button class="btn btn-thuto" style="padding: 1rem 2.5rem; font-size: 1.1rem;" onclick="openModal('post')">
+                <i class="fas fa-rocket"></i> Start Earning Today
+            </button>
+            <a href="https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/" target="_blank" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1rem; margin-left: 1rem; color: white; border-color: rgba(255,255,255,0.3);">
+                <i class="fas fa-external-link-alt"></i> Explore ThutoTech
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fas fa-store"></i></div>
+                    <div class="logo-text"><span style="color: white;">Student</span><span>Mart</span></div>
+                </div>
+                <p>South Africa's premier AI-powered student marketplace — a proud member of the ThutoTech Ecosystem. Fighting youth unemployment by empowering tertiary students through Society 5.0 human-centered AI.</p>
+                <div class="footer-eco-note">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Part of <a href="https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/" target="_blank" style="color: #5eead4;">ThutoTech Ecosystem</a> — Vertically-integrated AI education spanning the entire SA learning journey.</span>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4>ThutoTech Ecosystem</h4>
+                <ul>
+                    <li><a href="https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/" target="_blank" class="eco-footer-link">🌐 ThutoTech Main</a></li>
+                    <li><a href="#" class="eco-footer-link">📖 MatricMate AI</a></li>
+                    <li><a href="#" class="eco-footer-link">👥 Frictionless Learner</a></li>
+                    <li><a href="#" class="eco-footer-link">📚 Fundisa AI</a></li>
+                    <li><a href="#" class="eco-footer-link">🎓 SuperviseAI</a></li>
+                    <li><a href="#" class="eco-footer-link">🏫 Thuto AI Academy</a></li>
+                    <li><a href="#" class="eco-footer-link">🔬 Thuto Research Studio</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Top Categories</h4>
+                <ul>
+                    <li><a href="#">📚 Tutoring (MatricMate)</a></li>
+                    <li><a href="#">📸 Grad Photography</a></li>
+                    <li><a href="#">💇 Hair & Styling</a></li>
+                    <li><a href="#">💅 Nail Services</a></li>
+                    <li><a href="#">🚗 CampusLift Rides</a></li>
+                    <li><a href="#">🍲 Food & Catering</a></li>
+                    <li><a href="#">🛠️ Pro Services</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Safety Guidelines</a></li>
+                    <li><a href="#">CampusLift Safety</a></li>
+                    <li><a href="#">POPIA Compliance</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Report Issue</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 StudentMart SA — A <a href="https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/" target="_blank" style="color: #5eead4;">Thuto Technologies</a> Product.
+                <span class="sa-flag">
+                    <span style="background: #DE3831;"></span>
+                    <span style="background: #002395;"></span>
+                    <span style="background: #007A4D;"></span>
+                    <span style="background: #FFB612;"></span>
+                    <span style="background: #000000;"></span>
+                    <span style="background: #FFFFFF;"></span>
+                </span>
+            </p>
+            <p>Society 5.0 • Human-Centered AI • Made with ❤️ for South African Students</p>
+        </div>
+    </footer>
+
+    <!-- Post Ad Modal -->
+    <div class="modal-overlay" id="postModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('post')"><i class="fas fa-times"></i></button>
+            <h2>📝 Create a Listing</h2>
+            <p>AI will help you craft the perfect listing — connected to the ThutoTech ecosystem</p>
+            <form onsubmit="submitListing(event)">
+                <div class="form-group">
+                    <label>Listing Title *</label>
+                    <input type="text" placeholder="e.g., Graduation Photography Package" required id="listingTitle">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select required id="listingCategory">
+                            <option value="">Select category</option>
+                            <option value="tutoring">Tutoring (MatricMate/Peer)</option>
+                            <option value="photography">Photography</option>
+                            <option value="hair">Hair & Styling</option>
+                            <option value="nails">Nail Services</option>
+                            <option value="campuslift">CampusLift</option>
+                            <option value="products">Sell Product</option>
+                            <option value="services">Offer Service</option>
+                            <option value="errands">Run Errands</option>
+                            <option value="babysitting">Babysitting</option>
+                            <option value="beauty">Beauty & Wellness</option>
+                            <option value="food">Food & Catering</option>
+                            <option value="employment">Job / Gig</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (ZAR) *</label>
+                        <input type="number" placeholder="e.g., 250" required id="listingPrice">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>University *</label>
+                        <select required id="listingUni">
+                            <option value="">Select university</option>
+                            <option>UCT</option><option>Wits</option>
+                            <option>University of Pretoria</option>
+                            <option>Stellenbosch</option><option>UJ</option>
+                            <option>NWU</option><option>UKZN</option>
+                            <option>Rhodes</option><option>UFS</option>
+                            <option>Nelson Mandela University</option>
+                            <option>TUT</option><option>DUT</option><option>CPUT</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price Type</label>
+                        <select id="listingPriceType">
+                            <option value="fixed">Fixed Price</option>
+                            <option value="hour">Per Hour</option>
+                            <option value="session">Per Session</option>
+                            <option value="trip">Per Trip</option>
+                            <option value="negotiable">Negotiable</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea placeholder="Describe what you're offering in detail..." required id="listingDesc"></textarea>
+                    <div class="ai-helper-bar">
+                        <span><i class="fas fa-wand-magic-sparkles"></i> ThutoTech AI Assistant</span>
+                        <button type="button" class="btn btn-ai" onclick="aiGenerateDescription()">
+                            <i class="fas fa-magic"></i> Generate with AI
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Upload Image (optional)</label>
+                    <div class="image-upload-area" id="imageUploadArea" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload an image</p>
+                        <small>JPG, PNG up to 5MB</small>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Your Name *</label>
+                        <input type="text" placeholder="Your full name" required id="listingName">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number *</label>
+                        <input type="tel" placeholder="071 234 5678" required id="listingWhatsapp">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="createMiniSite" checked style="width: auto;">
+                        <span>Also generate my free AI Mini Website ✨</span>
+                    </label>
+                </div>
+                <div class="form-group" id="tutorEcosystemOpt" style="display: none;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="tutorEcosystemCheck" checked style="width: auto;">
+                        <span>Connect me to <strong style="color: var(--thuto-teal);">MatricMate AI</strong> & <strong style="color: var(--ai-purple);">Frictionless Learner</strong> 🎓</span>
+                    </label>
+                    <small style="color: var(--gray); font-size: 0.75rem; margin-top: 0.3rem; display: block;">Your tutoring listing will appear on connected ThutoTech platforms for matric learners and peer tutoring</small>
+                </div>
+                <button type="submit" class="btn btn-thuto form-submit">
+                    <i class="fas fa-paper-plane"></i> Publish Listing
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mini Site Builder Modal -->
+    <div class="modal-overlay" id="miniSiteModal">
+        <div class="modal modal-large">
+            <button class="modal-close" onclick="closeModal('miniSite')"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-wand-magic-sparkles" style="color: var(--thuto-teal);"></i> Build Your Mini Website</h2>
+            <p>AI will generate a professional mini site with WhatsApp & checkout — powered by ThutoTech</p>
+            <div class="form-group">
+                <label>Choose a Template</label>
+                <div class="template-grid">
+                    <div class="template-card active" data-template="green" onclick="selectTemplate(this, 'green')">
+                        <div class="template-preview" style="background: linear-gradient(135deg, #1B5E20, #4CAF50);">SM</div>
+                        <div class="template-name">Classic Green</div>
+                    </div>
+                    <div class="template-card" data-template="ocean" onclick="selectTemplate(this, 'ocean')">
+                        <div class="template-preview" style="background: linear-gradient(135deg, #0077be, #00bcd4);">SM</div>
+                        <div class="template-name">Ocean Blue</div>
+                    </div>
+                    <div class="template-card" data-template="sunset" onclick="selectTemplate(this, 'sunset')">
+                        <div class="template-preview" style="background: linear-gradient(135deg, #ff6f00, #ffc107);">SM</div>
+                        <div class="template-name">Sunset Orange</div>
+                    </div>
+                    <div class="template-card" data-template="thuto" onclick="selectTemplate(this, 'thuto')">
+                        <div class="template-preview" style="background: linear-gradient(135deg, var(--thuto-teal), var(--thuto-cyan));">SM</div>
+                        <div class="template-name">ThutoTech Teal</div>
+                    </div>
+                    <div class="template-card" data-template="rose" onclick="selectTemplate(this, 'rose')">
+                        <div class="template-preview" style="background: linear-gradient(135deg, #e91e63, #f48fb1);">SM</div>
+                        <div class="template-name">Rose Gold</div>
+                    </div>
+                    <div class="template-card" data-template="ai" onclick="selectTemplate(this, 'ai')">
+                        <div class="template-preview" style="background: linear-gradient(135deg, #8B5CF6, #3B82F6);">SM</div>
+                        <div class="template-name">AI Gradient</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mini-site-builder">
+                <div class="mini-site-form-col">
+                    <div class="form-group">
+                        <label>Your Full Name *</label>
+                        <input type="text" id="msName" placeholder="e.g., Palesa Nkosi" oninput="updateMiniSitePreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>Tagline / Profession *</label>
+                        <input type="text" id="msTagline" placeholder="e.g., Professional Tutor & Photographer" oninput="updateMiniSitePreview()">
+                        <div class="ai-helper-bar">
+                            <span><i class="fas fa-wand-magic-sparkles"></i> Need help?</span>
+                            <button type="button" class="btn btn-ai" onclick="aiGenerateTagline()"><i class="fas fa-magic"></i> AI Suggest</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>University *</label>
+                            <select id="msUni" onchange="updateMiniSitePreview()">
+                                <option value="">Select</option>
+                                <option>UCT</option><option>Wits</option>
+                                <option>University of Pretoria</option>
+                                <option>Stellenbosch</option><option>UJ</option>
+                                <option>NWU</option><option>UKZN</option>
+                                <option>Rhodes</option><option>UFS</option>
+                                <option>TUT</option><option>DUT</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp *</label>
+                            <input type="tel" id="msWhatsapp" placeholder="071 234 5678" oninput="updateMiniSitePreview()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>About You</label>
+                        <textarea id="msAbout" placeholder="Brief bio about your skills..." oninput="updateMiniSitePreview()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Services / Products (one per line with price)</label>
+                        <textarea id="msServices" placeholder="Maths Tutoring - R150/hr&#10;Grad Photoshoot - R350&#10;Logo Design - R250" oninput="updateMiniSitePreview()"></textarea>
+                    </div>
+                </div>
+                <div class="mini-site-preview-col">
+                    <div style="font-size: 0.75rem; color: var(--gray); margin-bottom: 0.5rem; text-align: center;">
+                        <i class="fas fa-eye"></i> Live Preview
+                    </div>
+                    <div class="mini-site-frame" id="miniSitePreview"></div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-thuto form-submit" onclick="publishMiniSite()">
+                <i class="fas fa-rocket"></i> Publish My Mini Website
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('checkout')"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-shopping-cart" style="color: var(--thuto-teal);"></i> Secure Checkout</h2>
+            <p>Complete your booking — POPIA-compliant, powered by ThutoTech MCP</p>
+            <div class="checkout-steps">
+                <div class="checkout-step active" id="step1"><div class="checkout-step-num">1</div><span>Cart</span></div>
+                <div class="checkout-step" id="step2"><div class="checkout-step-num">2</div><span>Payment</span></div>
+                <div class="checkout-step" id="step3"><div class="checkout-step-num">3</div><span>Done</span></div>
+            </div>
+            <div id="checkoutContent"></div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal-overlay" id="reviewModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal('review')"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-star" style="color: var(--accent);"></i> Leave a Review</h2>
+            <p>Help other students by sharing your experience</p>
+            <form onsubmit="submitReview(event)">
+                <div class="form-group">
+                    <label>Rating *</label>
+                    <div id="starRating" style="display: flex; gap: 0.5rem; font-size: 2rem; color: #ddd; cursor: pointer;">
+                        <i class="fas fa-star" data-val="1"></i>
+                        <i class="fas fa-star" data-val="2"></i>
+                        <i class="fas fa-star" data-val="3"></i>
+                        <i class="fas fa-star" data-val="4"></i>
+                        <i class="fas fa-star" data-val="5"></i>
+                    </div>
+                    <input type="hidden" id="reviewRating" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="reviewName" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Review *</label>
+                    <textarea id="reviewText" placeholder="What did you like about the service?" required></textarea>
+                    <div class="ai-helper-bar">
+                        <span><i class="fas fa-wand-magic-sparkles"></i> Stuck for words?</span>
+                        <button type="button" class="btn btn-ai" onclick="aiGenerateReview()"><i class="fas fa-magic"></i> AI Help</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-thuto form-submit"><i class="fas fa-paper-plane"></i> Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div class="ai-widget">
+        <div class="ai-chat-panel" id="aiChatPanel">
+            <div class="ai-chat-header">
+                <div class="ai-chat-avatar"><i class="fas fa-robot"></i></div>
+                <div><h4>Thuto AI Assistant</h4><small>Powered by ThutoTech MCP • Multilingual</small></div>
+                <button class="ai-chat-close" onclick="toggleAiChat()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="ai-chat-body" id="aiChatBody"></div>
+            <div class="ai-chat-suggestions" id="aiSuggestions">
+                <button class="ai-suggestion-chip" onclick="sendAiSuggestion('Find me a tutor for matric')">📚 Find a tutor</button>
+                <button class="ai-suggestion-chip" onclick="sendAiSuggestion('I need a ride')">🚗 Get a ride</button>
+                <button class="ai-suggestion-chip" onclick="sendAiSuggestion('Find a photographer')">📸 Photography</button>
+                <button class="ai-suggestion-chip" onclick="sendAiSuggestion('What is ThutoTech?')">🌐 ThutoTech</button>
+            </div>
+            <div class="ai-chat-input">
+                <input type="text" id="aiInput" placeholder="Ask Thuto AI..." onkeypress="if(event.key==='Enter') sendAiMessage()">
+                <button onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <button class="ai-widget-btn" onclick="toggleAiChat()" title="Chat with Thuto AI">
+            <i class="fas fa-robot"></i>
+        </button>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMsg">Success!</span>
+    </div>
+
+    <script>
+        const templateStyles = {
+            green: { bg: 'linear-gradient(135deg, #1B5E20, #4CAF50)', accent: '#4CAF50' },
+            ocean: { bg: 'linear-gradient(135deg, #0077be, #00bcd4)', accent: '#00bcd4' },
+            sunset: { bg: 'linear-gradient(135deg, #ff6f00, #ffc107)', accent: '#ff6f00' },
+            thuto: { bg: 'linear-gradient(135deg, #0d9488, #06b6d4)', accent: '#0d9488' },
+            rose: { bg: 'linear-gradient(135deg, #e91e63, #f48fb1)', accent: '#e91e63' },
+            ai: { bg: 'linear-gradient(135deg, #8B5CF6, #3B82F6)', accent: '#8B5CF6' }
+        };
+
+        let selectedTemplate = 'green';
+        let currentReviewTarget = null;
+        let uploadedImageData = null;
+        let cart = [];
+
+        const listings = [
+            { id: 1, title: "Matric Maths & Science Tutoring", category: "tutoring",
+              price: "R150", priceNum: 150, priceType: "/hour",
+              description: "CAPS-aligned tutoring for Matric learners. Connected to MatricMate AI for exam prep. Past papers, WhatsApp support. Available in English & isiZulu.",
+              seller: "Thabo M.", initials: "TM", uni: "Wits", rating: 4.9, reviews: 67,
+              icon: "fas fa-calculator", whatsapp: "27712345678", hasMiniSite: true, aiGenerated: true, thutoVerified: true },
+            { id: 2, title: "Knotless Braids - All Lengths", category: "hair",
+              price: "R350", priceNum: 350, priceType: "",
+              description: "Professional knotless braids, medium to long. Includes washing and conditioning. 4-6 hours. Res or salon visits.",
+              seller: "Palesa N.", initials: "PN", uni: "UJ", rating: 4.8, reviews: 89,
+              icon: "fas fa-cut", whatsapp: "27722345678", hasMiniSite: true, aiGenerated: true },
+            { id: 3, title: "Graduation Photography Package", category: "photography",
+              price: "R350", priceNum: 350, priceType: "/session",
+              description: "Professional graduation photos with 30+ edited shots, 2 outfit changes, and cap & gown shots. Drone shots available.",
+              seller: "Mandla M.", initials: "MM", uni: "Wits", rating: 4.9, reviews: 67,
+              icon: "fas fa-camera-retro", whatsapp: "27732345678", hasMiniSite: true, aiGenerated: true },
+            { id: 4, title: "CampusLift: Wits → Soweto Daily", category: "campuslift",
+              price: "R35", priceNum: 35, priceType: "/trip",
+              description: "Daily rides from Wits to Soweto. IoT tracked, student verified. 3 seats available. Departs 16:00.",
+              seller: "Sipho K.", initials: "SK", uni: "Wits", rating: 5.0, reviews: 124,
+              icon: "fas fa-car-side", whatsapp: "27742345678", hasMiniSite: true, iotVerified: true },
+            { id: 5, title: "Matric Accounting & Economics Tutor", category: "tutoring",
+              price: "R180", priceNum: 180, priceType: "/hour",
+              description: "CA(SA) student tutoring Matric Accounting & Economics. Connected to MatricMate AI. Available on Frictionless Learner for peer sessions.",
+              seller: "Lerato N.", initials: "LN", uni: "UP", rating: 4.8, reviews: 52,
+              icon: "fas fa-chart-line", whatsapp: "27752345678", hasMiniSite: true, aiGenerated: true, thutoVerified: true },
+            { id: 6, title: "Acrylic Nails Full Set + Art", category: "nails",
+              price: "R200", priceNum: 200, priceType: "",
+              description: "Full set of acrylic nails with custom nail art. Gel polish included. Mobile service available.",
+              seller: "Zanele T.", initials: "ZT", uni: "UKZN", rating: 4.9, reviews: 45,
+              icon: "fas fa-hand-sparkles", whatsapp: "27762345678", hasMiniSite: true },
+            { id: 7, title: "Physical Sciences Matric Tutoring", category: "tutoring",
+              price: "R160", priceNum: 160, priceType: "/hour",
+              description: "Physics & Chemistry for Matric. Connected to MatricMate AI platform. Multilingual: English, Afrikaans, Sesotho.",
+              seller: "Kagiso P.", initials: "KP", uni: "NWU", rating: 4.7, reviews: 38,
+              icon: "fas fa-atom", whatsapp: "27772345678", hasMiniSite: true, thutoVerified: true, aiGenerated: true },
+            { id: 8, title: "Home-Cooked Meals - Weekly Plan", category: "food",
+              price: "R450", priceNum: 450, priceType: "/week",
+              description: "5 home-cooked meals per week delivered to your res. Traditional SA meals: pap & stew, chicken curry, bobotie.",
+              seller: "Gogo N.", initials: "GN", uni: "UKZN", rating: 5.0, reviews: 73,
+              icon: "fas fa-utensils", whatsapp: "27782345678", hasMiniSite: true, aiGenerated: true },
+            { id: 9, title: "CampusLift: UCT → Khayelitsha", category: "campuslift",
+              price: "R45", priceNum: 45, priceType: "/trip",
+              description: "Safe daily rides UCT to Khayelitsha. Departs 17:00. IoT tracked, panic button, shareable trip link.",
+              seller: "Luthando B.", initials: "LB", uni: "UCT", rating: 4.9, reviews: 156,
+              icon: "fas fa-car-side", whatsapp: "27792345678", hasMiniSite: true, iotVerified: true },
+            { id: 10, title: "Logo & Brand Design Package", category: "services",
+              price: "R350", priceNum: 350, priceType: "",
+              description: "Professional logo with 3 concepts, unlimited revisions, brand guidelines. Perfect for student entrepreneurs.",
+              seller: "Amahle D.", initials: "AD", uni: "DUT", rating: 4.9, reviews: 34,
+              icon: "fas fa-paint-brush", whatsapp: "27802345678", hasMiniSite: true, aiGenerated: true },
+            { id: 11, title: "English & Afrikaans Matric Tutor", category: "tutoring",
+              price: "R140", priceNum: 140, priceType: "/hour",
+              description: "Matric English & Afrikaans tutoring. Essay writing, comprehension, literature. Connected to MatricMate AI for extra practice.",
+              seller: "Nomvula S.", initials: "NS", uni: "Stellenbosch", rating: 4.8, reviews: 41,
+              icon: "fas fa-book", whatsapp: "27812345678", hasMiniSite: true, thutoVerified: true },
+            { id: 12, title: "Event Photography & Videography", category: "photography",
+              price: "R800", priceNum: 800, priceType: "/event",
+              description: "Birthday parties, society events, functions. 3 hours coverage, edited photos + highlight video.",
+              seller: "Bongani M.", initials: "BM", uni: "UCT", rating: 4.8, reviews: 31,
+              icon: "fas fa-camera", whatsapp: "27822345678", hasMiniSite: true, aiGenerated: true }
+        ];
+
+        const liveReviewsData = [
+            { name: "Zanele M.", rating: 5, text: "Thabo's tutoring helped me get 85% in Matric Maths! The MatricMate AI + human tutor combo is amazing.", service: "MatricMate Tutoring", uni: "Wits" },
+            { name: "Blessing K.", rating: 5, text: "Palesa did my knotless braids perfectly. She's on Frictionless Learner too — booked her through the calendar!", service: "Hair Styling", uni: "UJ" },
+            { name: "Amanda P.", rating: 5, text: "Zanele's nail art is incredible. She came to my res and did a full set in 90 mins. Talented!", service: "Nail Services", uni: "UKZN" },
+            { name: "Tshepo R.", rating: 5, text: "CampusLift is a lifesaver! Safe, affordable, and the IoT tracking means my mom knows I'm safe.", service: "CampusLift", uni: "Wits" },
+            { name: "Nomvula D.", rating: 5, text: "Lerato's accounting tutoring through MatricMate AI pipeline helped me pass with a distinction!", service: "MatricMate Tutor", uni: "UP" },
+            { name: "Sibusiso N.", rating: 5, text: "The ThutoTech ecosystem is amazing — one platform for tutoring, mini sites, and rides. Future of SA education!", service: "Ecosystem Review", uni: "Wits" },
+            { name: "Lindiwe S.", rating: 5, text: "Found my tutor through Frictionless Learner, connected via StudentMart. Seamless experience across platforms.", service: "Peer Tutoring", uni: "Stellenbosch" },
+            { name: "Mpho T.", rating: 5, text: "R35 from campus to Soweto? Cheaper than a taxi and way safer. The IoT verification gives me peace of mind.", service: "CampusLift", uni: "Wits" }
+        ];
+
+        const miniSites = [
+            { name: "Thabo Molefe", profession: "MatricMate Tutor • Maths & Science", uni: "Wits", rating: 4.9, clients: 67, bookings: 120, template: 'thuto', initials: 'TM', services: ['Matric Maths - R150/hr', 'Matric Science - R150/hr', 'Exam Prep - R200/hr'] },
+            { name: "Mandla Mthembu", profession: "Grad & Event Photographer", uni: "Wits", rating: 4.9, clients: 67, bookings: 120, template: 'sunset', initials: 'MM', services: ['Grad Photos - R350', 'Events - R800', 'Portraits - R200'] },
+            { name: "Palesa Nkosi", profession: "Hair Stylist & Braider", uni: "UJ", rating: 4.8, clients: 89, bookings: 145, template: 'rose', initials: 'PN', services: ['Knotless - R350', 'Sew-in - R500', 'Cornrows - R200'] },
+            { name: "Lerato Nkosi", profession: "Matric Accounting Tutor", uni: "UP", rating: 4.8, clients: 52, bookings: 94, template: 'thuto', initials: 'LN', services: ['Accounting - R180/hr', 'Economics - R180/hr', 'Exam Prep - R250/hr'] }
+        ];
+
+        function getCategoryLabel(cat) {
+            const labels = {
+                tutoring: '📚 Tutoring', photography: '📸 Photography', hair: '💇 Hair & Styling',
+                nails: '💅 Nails', campuslift: '🚗 CampusLift', products: '📦 Products',
+                services: '🛠️ Services', errands: '🏃 Errands', babysitting: '👶 Babysitting',
+                beauty: '💆 Beauty', food: '🍲 Food', employment: '💼 Employment'
+            };
+            return labels[cat] || cat;
+        }
+
+        function renderListings(filter = 'all') {
+            const grid = document.getElementById('listingsGrid');
+            const filtered = filter === 'all' ? listings : listings.filter(l => l.category === filter);
+            grid.innerHTML = filtered.map(listing => `
+                <div class="listing-card" data-category="${listing.category}">
+                    <div class="listing-img">
+                        ${listing.thutoVerified ? '<span class="listing-badge-thuto"><i class="fas fa-layer-group"></i> ThutoTech Tutor</span>' :
+                          listing.iotVerified ? '<span class="listing-badge-iot"><i class="fas fa-shield-alt"></i> IoT Verified</span>' :
+                          listing.aiGenerated ? '<span class="listing-badge-ai"><i class="fas fa-wand-magic-sparkles"></i> AI Enhanced</span>' : ''}
+                        ${listing.hasMiniSite ? `<span class="listing-mini-site-badge" onclick="event.stopPropagation(); showToast('Opening mini site...')"><i class="fas fa-globe"></i> Mini Site</span>` : ''}
+                        ${listing.image ? `<img src="${listing.image}" alt="">` : `<i class="${listing.icon}"></i>`}
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-meta">
+                            <span class="listing-category">${getCategoryLabel(listing.category)}</span>
+                            <span class="listing-price">${listing.price}${listing.priceType}</span>
+                        </div>
+                        <h3>${listing.title}</h3>
+                        <p>${listing.description}</p>
+                        <div class="listing-footer">
+                            <div class="listing-seller">
+                                <div class="seller-avatar">${listing.initials}</div>
+                                <div class="seller-info"><span>${listing.seller}</span><small>${listing.uni}</small></div>
+                            </div>
+                            <div class="listing-rating"><i class="fas fa-star"></i><span>${listing.rating} (${listing.reviews})</span></div>
+                        </div>
+                        <div class="listing-actions">
+                            <button class="btn btn-whatsapp" onclick="contactWhatsApp('${listing.whatsapp}', '${listing.title}')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="btn btn-thuto" onclick="addToCart(${listing.id})">
+                                <i class="fas fa-cart-plus"></i> Book Now
+                            </button>
+                            <button class="btn btn-secondary" style="grid-column: 1 / -1;" onclick="openReviewModal(${listing.id})">
+                                <i class="fas fa-star"></i> Leave a Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderMiniSites() {
+            const grid = document.getElementById('miniSitesGrid');
+            grid.innerHTML = miniSites.map(site => {
+                const style = templateStyles[site.template];
+                return `
+                    <div class="mini-site-card" onclick="showToast('Viewing ${site.name}\\'s mini site...')">
+                        <div class="mini-site-preview" style="background: ${style.bg};">
+                            <div class="mini-site-preview-overlay"></div>
+                            <div class="mini-site-info">
+                                <h4>${site.name}</h4>
+                                <small>${site.profession} • ${site.uni}</small>
+                            </div>
+                        </div>
+                        <div class="mini-site-body">
+                            <div class="mini-site-stats">
+                                <div class="mini-site-stat"><strong>${site.rating}★</strong><span>Rating</span></div>
+                                <div class="mini-site-stat"><strong>${site.clients}</strong><span>Clients</span></div>
+                                <div class="mini-site-stat"><strong>${site.bookings}</strong><span>Bookings</span></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--gray); margin-bottom: 0.8rem;">${site.services.slice(0, 2).join(' • ')}</div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-whatsapp" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; justify-content: center;"><i class="fab fa-whatsapp"></i> Contact</button>
+                                <button class="btn btn-thuto" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; justify-content: center;"><i class="fas fa-eye"></i> Visit</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function renderLiveReviews() {
+            const track = document.getElementById('liveReviewsTrack');
+            const doubled = [...liveReviewsData, ...liveReviewsData];
+            track.innerHTML = doubled.map(r => `
+                <div class="live-review-card">
+                    <div class="stars">${'★'.repeat(r.rating)}</div>
+                    <p>"${r.text}"</p>
+                    <div class="author">— ${r.name} • ${r.uni} • ${r.service}</div>
+                </div>
+            `).join('');
+        }
+
+        function setFilter(btn, category) {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            renderListings(category);
+        }
+
+        function filterListings(category) {
+            document.getElementById('marketplace').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                    const text = t.textContent.toLowerCase().replace(/[^\w\s]/g, '').trim();
+                    if (text === category || (category === 'all' && text === 'all')) t.classList.add('active');
+                });
+                renderListings(category);
+            }, 500);
+        }
+
+        function performSearch() {
+            const query = document.getElementById('heroSearch').value.toLowerCase();
+            const catSelect = document.getElementById('heroCategorySelect').value;
+            const grid = document.getElementById('listingsGrid');
+            let results = listings;
+            if (catSelect !== 'All Categories') {
+                const catMap = { 'Tutoring': 'tutoring', 'Photography': 'photography', 'Hair & Beauty': 'hair', 'Nail Services': 'nails', 'CampusLift': 'campuslift', 'Products': 'products', 'Errands': 'errands' };
+                const catKey = catMap[catSelect] || catSelect.toLowerCase();
+                results = results.filter(l => l.category === catKey);
+            }
+            if (query) {
+                results = results.filter(l => l.title.toLowerCase().includes(query) || l.description.toLowerCase().includes(query) || l.category.toLowerCase().includes(query));
+            }
+            if (results.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--gray);"><i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i><h3>No results found</h3><p>Try different keywords or browse categories</p></div>';
+            } else {
+                grid.innerHTML = results.map(listing => `
+                    <div class="listing-card">
+                        <div class="listing-img">
+                            ${listing.thutoVerified ? '<span class="listing-badge-thuto"><i class="fas fa-layer-group"></i> ThutoTech</span>' :
+                              listing.iotVerified ? '<span class="listing-badge-iot"><i class="fas fa-shield-alt"></i> IoT</span>' : ''}
+                            <i class="${listing.icon}"></i>
+                        </div>
+                        <div class="listing-content">
+                            <div class="listing-meta">
+                                <span class="listing-category">${getCategoryLabel(listing.category)}</span>
+                                <span class="listing-price">${listing.price}${listing.priceType}</span>
+                            </div>
+                            <h3>${listing.title}</h3>
+                            <p>${listing.description}</p>
+                            <div class="listing-footer">
+                                <div class="listing-seller"><div class="seller-avatar">${listing.initials}</div><div class="seller-info"><span>${listing.seller}</span><small>${listing.uni}</small></div></div>
+                                <div class="listing-rating"><i class="fas fa-star"></i><span>${listing.rating} (${listing.reviews})</span></div>
+                            </div>
+                            <div class="listing-actions">
+                                <button class="btn btn-whatsapp" onclick="contactWhatsApp('${listing.whatsapp}', '${listing.title}')"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                                <button class="btn btn-thuto" onclick="addToCart(${listing.id})"><i class="fas fa-cart-plus"></i> Book</button>
+                            </div>
+                        </div>
+                    </div>`).join('');
+            }
+            document.getElementById('marketplace').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function contactWhatsApp(phone, service) {
+            const message = encodeURIComponent(`Hi! I'm interested in your "${service}" service on StudentMart (ThutoTech Ecosystem). Is it still available?`);
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+            showToast('Opening WhatsApp...');
+        }
+
+        function addToCart(listingId) {
+            const listing = listings.find(l => l.id === listingId);
+            if (!listing) return;
+            if (cart.find(c => c.id === listingId)) { showToast('Already in cart!', 'error'); return; }
+            cart.push({ ...listing, qty: 1 });
+            updateCartCount();
+            showToast(`${listing.title} added to cart! 🛒`);
+        }
+
+        function removeFromCart(listingId) {
+            cart = cart.filter(c => c.id !== listingId);
+            updateCartCount();
+            renderCheckoutStep1();
+        }
+
+        function updateCartCount() { document.getElementById('cartCount').textContent = cart.length; }
+
+        function renderCheckoutStep1() {
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step3').classList.remove('active');
+            const content = document.getElementById('checkoutContent');
+            if (cart.length === 0) {
+                content.innerHTML = `<div style="text-align: center; padding: 3rem 1rem;"><i class="fas fa-shopping-cart" style="font-size: 4rem; color: #e0e0e0; margin-bottom: 1rem; display: block;"></i><h3 style="color: var(--gray); margin-bottom: 0.5rem;">Your cart is empty</h3><p style="color: var(--gray); font-size: 0.9rem;">Browse the marketplace to book services</p><button class="btn btn-thuto" style="margin-top: 1.5rem;" onclick="closeModal('checkout')">Browse Marketplace</button></div>`;
+                return;
+            }
+            const subtotal = cart.reduce((sum, item) => sum + item.priceNum, 0);
+            const fee = Math.round(subtotal * 0.025);
+            const total = subtotal + fee;
+            content.innerHTML = `
+                <div style="max-height: 300px; overflow-y: auto; margin-bottom: 1rem;">
+                    ${cart.map(item => `<div class="cart-item"><div class="cart-item-img"><i class="${item.icon}"></i></div><div class="cart-item-info"><h4>${item.title}</h4><p>by ${item.seller} • ${item.uni}</p></div><div class="cart-item-price">${item.price}${item.priceType}</div><button class="cart-item-remove" onclick="removeFromCart(${item.id})"><i class="fas fa-trash"></i></button></div>`).join('')}
+                </div>
+                <div class="cart-summary">
+                    <div class="cart-summary-row"><span>Subtotal</span><span>R${subtotal.toLocaleString()}</span></div>
+                    <div class="cart-summary-row"><span>Service Fee (2.5%)</span><span>R${fee}</span></div>
+                    <div class="cart-summary-row cart-summary-total"><span>Total</span><span>R${total.toLocaleString()}</span></div>
+                </div>
+                <button class="btn btn-thuto form-submit" onclick="renderCheckoutStep2()">Continue to Payment <i class="fas fa-arrow-right"></i></button>`;
+        }
+
+        function renderCheckoutStep2() {
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            const subtotal = cart.reduce((sum, item) => sum + item.priceNum, 0);
+            const total = subtotal + Math.round(subtotal * 0.025);
+            document.getElementById('checkoutContent').innerHTML = `
+                <h3 style="margin-bottom: 1rem; font-size: 1rem;">Select Payment Method</h3>
+                <div class="payment-methods">
+                    <div class="payment-method active" onclick="selectPayment(this)"><i class="fas fa-credit-card"></i><strong>Card</strong><small>Visa, Mastercard</small></div>
+                    <div class="payment-method" onclick="selectPayment(this)"><i class="fas fa-university"></i><strong>EFT</strong><small>Bank Transfer</small></div>
+                    <div class="payment-method" onclick="selectPayment(this)"><i class="fas fa-qrcode"></i><strong>SnapScan</strong><small>Scan to Pay</small></div>
+                    <div class="payment-method" onclick="selectPayment(this)"><i class="fas fa-mobile-alt"></i><strong>eWallet</strong><small>eWallet/FNB</small></div>
+                </div>
+                <div class="form-group"><label>Cardholder Name</label><input type="text" placeholder="Name on card"></div>
+                <div class="form-group"><label>Card Number</label><input type="text" placeholder="4000 0000 0000 0000"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Expiry</label><input type="text" placeholder="MM/YY"></div>
+                    <div class="form-group"><label>CVV</label><input type="text" placeholder="123"></div>
+                </div>
+                <div class="cart-summary"><div class="cart-summary-row cart-summary-total"><span>Total to Pay</span><span>R${total.toLocaleString()}</span></div></div>
+                <button class="btn btn-thuto form-submit" onclick="completePayment()"><i class="fas fa-lock"></i> Pay Securely</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.75rem; color: var(--gray);"><i class="fas fa-shield-alt"></i> POPIA Compliant • 256-bit SSL • ThutoTech MCP Secured</p>`;
+        }
+
+        function selectPayment(el) { document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active')); el.classList.add('active'); }
+
+        function completePayment() {
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step3').classList.add('active');
+            const orderId = 'TT' + Date.now().toString().slice(-8);
+            document.getElementById('checkoutContent').innerHTML = `
+                <div style="text-align: center; padding: 2rem 1rem;">
+                    <div class="success-check"><i class="fas fa-check"></i></div>
+                    <h3 style="margin-bottom: 0.5rem; color: var(--thuto-teal);">Payment Successful!</h3>
+                    <p style="color: var(--gray); margin-bottom: 1.5rem;">Your booking has been confirmed</p>
+                    <div style="background: var(--light); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                        <p style="font-size: 0.85rem;"><strong>Order ID:</strong> #${orderId}</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.3rem;"><strong>Provider:</strong> ${cart[0]?.seller}</p>
+                        <p style="font-size: 0.75rem; color: var(--thuto-teal); margin-top: 0.3rem;">🌐 ThutoTech Ecosystem Verified</p>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 1.5rem;"><i class="fab fa-whatsapp" style="color: var(--whatsapp);"></i> Confirmation sent to provider via WhatsApp</p>
+                    <button class="btn btn-thuto" onclick="finishCheckout()"><i class="fas fa-check"></i> Done</button>
+                </div>`;
+        }
+
+        function finishCheckout() { cart = []; updateCartCount(); closeModal('checkout'); showToast('Transaction completed! 🎉'); }
+
+        function openReviewModal(listingId) { currentReviewTarget = listingId; openModal('review'); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const stars = document.querySelectorAll('#starRating i');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const val = parseInt(star.dataset.val);
+                    document.getElementById('reviewRating').value = val;
+                    stars.forEach((s, i) => { s.style.color = i < val ? '#FFC107' : '#ddd'; });
+                });
+            });
+            // Show tutor ecosystem opt when category changes
+            document.getElementById('listingCategory').addEventListener('change', function() {
+                document.getElementById('tutorEcosystemOpt').style.display = this.value === 'tutoring' ? 'block' : 'none';
+            });
+        });
+
+        function submitReview(e) {
+            e.preventDefault();
+            const rating = parseInt(document.getElementById('reviewRating').value);
+            const name = document.getElementById('reviewName').value;
+            const text = document.getElementById('reviewText').value;
+            if (rating === 0) { showToast('Please select a rating', 'error'); return; }
+            const listing = listings.find(l => l.id === currentReviewTarget);
+            if (listing) { listing.reviews += 1; listing.rating = Math.round(((listing.rating * (listing.reviews - 1) + rating) / listing.reviews) * 10) / 10; }
+            liveReviewsData.unshift({ name, rating, text, service: listing?.title || 'Service', uni: listing?.uni || 'SA' });
+            renderListings('all');
+            renderLiveReviews();
+            closeModal('review');
+            document.getElementById('reviewRating').value = 0;
+            document.querySelectorAll('#starRating i').forEach(s => s.style.color = '#ddd');
+            e.target.reset();
+            showToast('Review posted! Thank you! ⭐');
+        }
+
+        function aiGenerateDescription() {
+            const title = document.getElementById('listingTitle').value;
+            const category = document.getElementById('listingCategory').value;
+            const price = document.getElementById('listingPrice').value;
+            const descField = document.getElementById('listingDesc');
+            if (!title || !category) { showToast('Please fill in title and category first', 'error'); return; }
+            const templates = {
+                tutoring: `📚 ${title}\n\nPart of the ThutoTech Ecosystem — connected to MatricMate AI & Frictionless Learner!\n\n✨ What you get:\n• CAPS-aligned tutoring sessions\n• Connected to MatricMate AI for additional practice\n• Available on Frictionless Learner for peer tutoring\n• Multilingual support (11 SA languages)\n• Past paper walkthroughs & exam prep\n• WhatsApp support between sessions\n\n💰 R${price}/hour — affordable for students\n📍 On-campus, library, or online via Zoom\n🌐 POPIA-compliant, offline-first booking\n\nI'm a verified ThutoTech tutor — your marks are my mission! Let's get you that distinction! 🚀`,
+                photography: `📸 ${title}\n\nCapture your special moments with professional photography!\n\n✨ What's included:\n• 1-2 hour professional photoshoot\n• 30+ edited high-resolution photos\n• 2 outfit changes\n• Same-week delivery\n\n💰 R${price} per session\n📍 Available on and around campus\n\nBook via WhatsApp — slots fill up fast during grad season! 🎓`,
+                hair: `💇‍♀️ ${title}\n\nProfessional hair services from a skilled student stylist!\n\n✨ Services offered:\n• ${title}\n• Washing & conditioning included\n• Quality products used\n• I come to your res or visit my studio\n\n💰 R${price} — student-friendly pricing\n\nCheck my mini site for portfolio pics! Book via WhatsApp! 💕`,
+                nails: `💅 ${title}\n\nSalon-quality nails without the salon price tag!\n\n✨ What you get:\n• Full set ${title.toLowerCase()}\n• Custom nail art designs\n• 50+ colour options\n• Mobile service available\n\n💰 R${price}\n\nBook 24hrs in advance via WhatsApp! 💖`,
+                campuslift: `🚗 ${title}\n\nSafe, affordable, IoT-verified rides!\n\n🔒 Safety Features:\n• IoT GPS tracker on every trip\n• Student ID & license verified\n• Real-time trip sharing\n• Panic button connected to SAPS\n\n💰 R${price} per trip\n\nJoin my daily lift club and save! 🚀`,
+                food: `🍲 ${title}\n\nHome-cooked meals delivered to your res!\n\n✨ What's included:\n• Fresh, home-cooked traditional meals\n• Delivered to your res door\n• Vegetarian options available\n\n💰 R${price}\n\nWhatsApp to see this week's menu! 🤤`,
+                beauty: `💆 ${title}\n\nLook and feel your best!\n\n✨ Services:\n• ${title}\n• High-quality products used\n• Mobile service available\n\n💰 R${price}\n\nBook early for weekend slots! ✨`,
+                services: `🛠️ ${title}\n\nProfessional service at student-friendly rates!\n\n✅ What's included:\n• High-quality work delivery\n• Unlimited revisions\n• Fast turnaround\n\n💰 R${price}`,
+                errands: `🏃 ${title}\n\nToo busy studying? I've got you covered!\n\n⚡ Same-day delivery\n💬 WhatsApp updates\n💰 R${price}`,
+                babysitting: `👶 ${title}\n\nTrustworthy childcare from a verified student.\n\n🌟 First Aid certified\n⏰ Flexible hours\n💰 R${price}`,
+                employment: `💼 ${title}\n\nGreat opportunity for students!\n\n💰 R${price}\n⏰ Flexible hours`,
+                products: `📦 ${title}\n\nSelling in excellent condition!\n\n💰 R${price}\n📍 Meet on campus`
+            };
+            const fullText = templates[category] || templates.services;
+            descField.value = '';
+            let i = 0;
+            const typeWriter = () => { if (i < fullText.length) { descField.value += fullText.charAt(i); i++; setTimeout(typeWriter, 8); } };
+            typeWriter();
+            showToast('ThutoTech AI generated your description! ✨');
+        }
+
+        function aiGenerateTagline() {
+            const taglines = ["MatricMate Verified Tutor • Distinction Specialist", "Professional Photographer • Grad Specialist", "Hair Stylist • Braids & Weaves Expert", "Nail Technician • Custom Nail Art", "CampusLift Driver • IoT Verified & Safe", "ThutoTech Certified • Professional Service", "Home Chef • Traditional SA Meals", "Your Campus Service Provider"];
+            document.getElementById('msTagline').value = taglines[Math.floor(Math.random() * taglines.length)];
+            updateMiniSitePreview();
+            showToast('ThutoTech AI suggested a tagline! ✨');
+        }
+
+        function aiGenerateReview() {
+            const samples = ["Absolutely fantastic service! Very professional and delivered exactly as promised. The ThutoTech ecosystem makes booking so easy.", "Great value for money. Connected through MatricMate AI and the tutor was amazing. Communication was excellent.", "Highly recommend! Part of the ThutoTech ecosystem so I knew the quality would be there. Will use again.", "Reliable, friendly, and professional. The POPIA compliance gives me peace of mind. 5 stars all the way!"];
+            document.getElementById('reviewText').value = samples[Math.floor(Math.random() * samples.length)];
+            showToast('ThutoTech AI helped with your review! ✨');
+        }
+
+        function toggleAiChat() {
+            const panel = document.getElementById('aiChatPanel');
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active') && document.getElementById('aiChatBody').children.length === 0) {
+                addAiMessage('bot', "Sawubona! 👋 I'm the ThutoTech AI Assistant, powered by MCP architecture. I can help you find tutors (connected to MatricMate AI & Frictionless Learner), photographers, CampusLift rides, and more. What do you need?");
+            }
+        }
+
+        function addAiMessage(sender, text) {
+            const body = document.getElementById('aiChatBody');
+            const msg = document.createElement('div');
+            msg.className = `ai-msg ${sender}`;
+            msg.innerHTML = `<div class="ai-msg-avatar"><i class="fas fa-${sender === 'bot' ? 'robot' : 'user'}"></i></div><div class="ai-msg-bubble">${text}</div>`;
+            body.appendChild(msg);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const body = document.getElementById('aiChatBody');
+            const typing = document.createElement('div');
+            typing.className = 'ai-msg bot'; typing.id = 'typingIndicator';
+            typing.innerHTML = `<div class="ai-msg-avatar"><i class="fas fa-robot"></i></div><div class="ai-msg-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+            body.appendChild(typing); body.scrollTop = body.scrollHeight;
+        }
+
+        function removeTypingIndicator() { const t = document.getElementById('typingIndicator'); if (t) t.remove(); }
+
+        function sendAiMessage() {
+            const input = document.getElementById('aiInput');
+            const text = input.value.trim();
+            if (!text) return;
+            addAiMessage('user', text); input.value = '';
+            setTimeout(() => { addTypingIndicator(); setTimeout(() => { removeTypingIndicator(); respondToAiQuery(text); }, 1200); }, 300);
+        }
+
+        function sendAiSuggestion(text) { document.getElementById('aiInput').value = text; sendAiMessage(); }
+
+        function respondToAiQuery(query) {
+            const q = query.toLowerCase();
+            let response;
+            if (q.includes('thuto') || q.includes('ecosystem')) {
+                response = "🌐 <strong>ThutoTech</strong> is a vertically-integrated AI education ecosystem! It includes: <strong>Fundisa AI</strong> (teachers), <strong>MatricMate AI</strong> (matric prep), <strong>SuperviseAI</strong> (postgrad), <strong>Frictionless Learner</strong> (peer tutoring), <strong>StudentMart</strong> (marketplace — you're here!), and <strong>Thuto AI Academy</strong> (certifications). All connected via MCP architecture! <a href='https://reggie9102.github.io/Thuto-Technologies-PTY-LTD/' target='_blank' style='color: var(--thuto-teal);'>Learn more →</a>";
+            } else if (q.includes('matric') || q.includes('matricmate')) {
+                response = "📖 <strong>MatricMate AI</strong> is our matric exam prep platform! Tutors listed on StudentMart are directly connected to MatricMate AI — matric learners find AI-powered prep + verified human tutors. Filter by 'Tutoring' in the marketplace to find CAPS-aligned tutors!";
+            } else if (q.includes('friction') || q.includes('peer') || q.includes('tutor')) {
+                response = "👥 <strong>Frictionless Learner</strong> is our Predict+Connect peer tutoring platform! StudentMart tutors appear as premium verified options there. Calendar integration lets you book across platforms. Look for the 🌐 ThutoTech badge on tutor listings!";
+            } else if (q.includes('photo') || q.includes('grad') || q.includes('camera')) {
+                response = "📸 We have amazing student photographers! Filter the marketplace by 'Photography' to find verified photographers with mini sites and WhatsApp booking. Grad season slots fill fast!";
+            } else if (q.includes('hair') || q.includes('braid') || q.includes('weave')) {
+                response = "💇‍♀️ Great choice! Filter by 'Hair' in the marketplace. All stylists have portfolios on their mini sites. Book via WhatsApp!";
+            } else if (q.includes('nail') || q.includes('mani') || q.includes('gel')) {
+                response = "💅 Our nail techs are talented! Filter by 'Nails' in the marketplace. Mobile service available — they come to your res!";
+            } else if (q.includes('ride') || q.includes('lift') || q.includes('uber') || q.includes('transport') || q.includes('car')) {
+                response = "🚗 <strong>CampusLift</strong> offers IoT-verified student rides from R18-45! All trips GPS-tracked with panic buttons. Filter by 'CampusLift' in the marketplace. Safer and cheaper than Uber!";
+            } else if (q.includes('offline') || q.includes('language') || q.includes('popia')) {
+                response = "🔒 The entire ThutoTech ecosystem is <strong>POPIA-compliant</strong>, supports <strong>11 SA languages</strong> via InkubaLM + NLLB, and is <strong>offline-first</strong> with Smart Sync Engine. Technology serves all South African students!";
+            } else {
+                response = "I can help with: 📚 Tutoring (MatricMate AI connected), 📸 Photography, 💇 Hair, 💅 Nails, 🚗 CampusLift, and more! I can also explain the <strong>ThutoTech ecosystem</strong>. Try asking: <em>'Find me a tutor for matric'</em> or <em>'What is ThutoTech?'</em> 💡";
+            }
+            addAiMessage('bot', response);
+        }
+
+        function selectTemplate(el, template) {
+            document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active'); selectedTemplate = template; updateMiniSitePreview();
+        }
+
+        function updateMiniSitePreview() {
+            const name = document.getElementById('msName').value || 'Your Name';
+            const tagline = document.getElementById('msTagline').value || 'Your Profession';
+            const uni = document.getElementById('msUni').value || 'University';
+            const about = document.getElementById('msAbout').value || 'Your bio will appear here.';
+            const servicesRaw = document.getElementById('msServices').value;
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) || 'YN';
+            const style = templateStyles[selectedTemplate];
+            let services = servicesRaw ? servicesRaw.split('\n').filter(s => s.trim()).slice(0, 4).map(s => { const parts = s.split('-'); return { name: parts[0].trim(), price: parts[1]?.trim() || 'Contact' }; }) : [{ name: 'Sample Service 1', price: 'R100' }, { name: 'Sample Service 2', price: 'R150' }];
+            document.getElementById('miniSitePreview').innerHTML = `
+                <div class="ms-hero" style="background: ${style.bg};">
+                    <div class="ms-avatar" style="color: ${style.accent};">${initials}</div>
+                    <h3>${name}</h3><p>${tagline}</p>
+                    <div class="ms-verified"><i class="fas fa-check-circle"></i> Verified • ${uni} • ThutoTech</div>
+                </div>
+                <div class="ms-section"><h4><i class="fas fa-info-circle" style="color: ${style.accent};"></i> About</h4><p style="font-size: 0.8rem; color: var(--gray);">${about}</p></div>
+                <div class="ms-section"><h4><i class="fas fa-briefcase" style="color: ${style.accent};"></i> Services</h4><ul class="ms-service-list">${services.map(s => `<li class="ms-service-item"><span>${s.name}</span><strong>${s.price}</strong></li>`).join('')}</ul></div>
+                <div class="ms-section"><h4><i class="fas fa-star" style="color: var(--accent);"></i> Reviews</h4><div class="ms-reviews"><div class="ms-review"><div class="stars">★★★★★</div><p>"Amazing service! Part of the ThutoTech ecosystem — quality guaranteed."</p><small>— Recent Client</small></div></div></div>
+                <div class="ms-actions">
+                    <button style="background: var(--whatsapp); color: white;"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button style="background: ${style.accent}; color: white;"><i class="fas fa-calendar-check"></i> Book Now</button>
+                </div>`;
+        }
+
+        function publishMiniSite() {
+            const name = document.getElementById('msName').value;
+            const tagline = document.getElementById('msTagline').value;
+            const uni = document.getElementById('msUni').value;
+            const whatsapp = document.getElementById('msWhatsapp').value;
+            if (!name || !tagline || !uni || !whatsapp) { showToast('Please fill in all required fields', 'error'); return; }
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            const services = document.getElementById('msServices').value.split('\n').filter(s => s.trim()).slice(0, 3);
+            miniSites.unshift({ name, profession: tagline, uni, rating: 5.0, clients: 0, bookings: 0, template: selectedTemplate, initials, services: services.length ? services : ['Contact for pricing'] });
+            renderMiniSites(); closeModal('miniSite');
+            showToast(`🎉 Mini site published! thutomart.co.za/${name.toLowerCase().replace(/\s+/g, '-')}`);
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => { uploadedImageData = e.target.result; const area = document.getElementById('imageUploadArea'); area.classList.add('has-image'); area.innerHTML = `<img src="${uploadedImageData}" class="image-preview">`; };
+            reader.readAsDataURL(file);
+        }
+
+        function submitListing(e) {
+            e.preventDefault();
+            const title = document.getElementById('listingTitle').value;
+            const category = document.getElementById('listingCategory').value;
+            const price = document.getElementById('listingPrice').value;
+            const uni = document.getElementById('listingUni').value;
+            const priceType = document.getElementById('listingPriceType').value;
+            const desc = document.getElementById('listingDesc').value;
+            const name = document.getElementById('listingName').value;
+            const whatsapp = document.getElementById('listingWhatsapp').value;
+            const priceTypeMap = { hour: '/hour', negotiable: ' (negotiable)', session: '/session', trip: '/trip' };
+            const priceTypeLabel = priceTypeMap[priceType] || '';
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            const icons = { tutoring: 'fas fa-graduation-cap', photography: 'fas fa-camera-retro', hair: 'fas fa-cut', nails: 'fas fa-hand-sparkles', campuslift: 'fas fa-car-side', products: 'fas fa-box', services: 'fas fa-concierge-bell', errands: 'fas fa-running', babysitting: 'fas fa-baby', beauty: 'fas fa-spa', food: 'fas fa-utensils', employment: 'fas fa-briefcase' };
+            const newListing = {
+                id: listings.length + 1, title, category, price: 'R' + parseInt(price).toLocaleString(),
+                priceNum: parseInt(price), priceType: priceTypeLabel, description: desc, seller: name,
+                initials, uni, rating: 5.0, reviews: 0, icon: icons[category] || 'fas fa-tag',
+                image: uploadedImageData, whatsapp: whatsapp.replace(/\D/g, ''),
+                hasMiniSite: document.getElementById('createMiniSite').checked,
+                aiGenerated: desc.includes('✨') || desc.includes('🎓') || desc.includes('✅'),
+                iotVerified: category === 'campuslift',
+                thutoVerified: category === 'tutoring'
+            };
+            listings.unshift(newListing);
+            renderListings('all');
+            closeModal('post');
+            e.target.reset();
+            uploadedImageData = null;
+            const uploadArea = document.getElementById('imageUploadArea');
+            uploadArea.classList.remove('has-image');
+            uploadArea.innerHTML = `<i class="fas fa-cloud-upload-alt"></i><p>Click to upload an image</p><small>JPG, PNG up to 5MB</small>`;
+            const ecoMsg = category === 'tutoring' ? ' + connected to MatricMate AI & Frictionless Learner!' : '';
+            showToast(`Listing published!${ecoMsg} 🎉`);
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.filter-tab').classList.add('active');
+        }
+
+        function openModal(type) {
+            if (type === 'checkout') { document.getElementById('checkoutModal').classList.add('active'); renderCheckoutStep1(); }
+            else if (type === 'miniSite') { document.getElementById('miniSiteModal').classList.add('active'); updateMiniSitePreview(); }
+            else { document.getElementById(type + 'Modal').classList.add('active'); }
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(type) {
+            if (type === 'checkout') document.getElementById('checkoutModal').classList.remove('active');
+            else if (type === 'miniSite') document.getElementById('miniSiteModal').classList.remove('active');
+            else document.getElementById(type + 'Modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', (e) => { if (e.target === overlay) { overlay.classList.remove('active'); document.body.style.overflow = ''; } }); });
+
+        function showToast(msg, type = 'success') { const toast = document.getElementById('toast'); document.getElementById('toastMsg').textContent = msg; toast.className = 'toast show' + (type === 'error' ? ' error' : ''); setTimeout(() => toast.className = 'toast', 4000); }
+        function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('active'); }
+        window.addEventListener('scroll', () => { const navbar = document.getElementById('navbar'); if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); } });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { const target = document.querySelector(this.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }); });
+        document.getElementById('heroSearch').addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
+
+        document.addEventListener('DOMContentLoaded', () => { renderListings('all'); renderMiniSites(); renderLiveReviews(); });
+    </script>
+</body>
+</html>
+
